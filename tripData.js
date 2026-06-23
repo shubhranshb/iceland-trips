@@ -1,11 +1,23 @@
 export const TRIP_INFO = {
     dates: "Dec 9–13, 2025",
+    startDate: "2025-12-09",
+    endDate: "2025-12-13",
     travellers: 2,
     car: "Kia Sportage",
     hotel: "Hotel 201, Kópavogur",
     hotelCoords: { lat: 64.0974639, lng: -21.8893358 },
     breakfast: "Included at hotel",
     currency: "EUR",
+  };
+
+  // Fill in your booking references below
+  export const BOOKINGS = {
+    flights: [
+      { route: "Outbound — BER → AMS → KEF (Dec 9)", pnr: "" },
+      { route: "Return — KEF → AMS → BER (Dec 13)", pnr: "" },
+    ],
+    hotelBookingId: "",
+    carBookingId: "",
   };
   
   export const AURORA_LINKS = [

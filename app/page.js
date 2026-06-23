@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TRIP_INFO,
+  BOOKINGS,
   AURORA_LINKS,
   DAILY_ROUTES,
   CAFES,
@@ -12,16 +13,60 @@ import {
 
 const totalCost = COST_SUMMARY.breakdown.reduce((sum, item) => sum + item.amount, 0);
 
+function getCountdown(startDate, endDate) {
+  const now = new Date();
+  const start = new Date(`${startDate}T00:00:00`);
+  const end = new Date(`${endDate}T23:59:59`);
+  const msPerDay = 1000 * 60 * 60 * 24;
+
+  if (now < start) {
+    const days = Math.ceil((start - now) / msPerDay);
+    return { status: "upcoming", days, label: days === 1 ? "day to go" : "days to go" };
+  }
+  if (now <= end) {
+    const dayNum = Math.floor((now - start) / msPerDay) + 1;
+    return { status: "active", days: dayNum, label: `Day ${dayNum} of trip` };
+  }
+  const daysAgo = Math.floor((now - end) / msPerDay);
+  return {
+    status: "past",
+    days: daysAgo,
+    label: daysAgo === 0 ? "Trip ended today" : daysAgo === 1 ? "day ago" : "days ago",
+  };
+}
+
 export default function TripPlanner() {
   const [activeDay, setActiveDay] = useState(1);
+  const [countdown, setCountdown] = useState(() =>
+    getCountdown(TRIP_INFO.startDate, TRIP_INFO.endDate)
+  );
   const day = DAYS.find((d) => d.id === activeDay);
   const route = DAILY_ROUTES[day.routeKey];
+
+  useEffect(() => {
+    const tick = () => setCountdown(getCountdown(TRIP_INFO.startDate, TRIP_INFO.endDate));
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <main>
       <header className="hero">
         <h1>🇮🇸 Iceland Trip</h1>
         <p>{TRIP_INFO.dates} · {TRIP_INFO.travellers} travellers</p>
+
+        <div className={`countdown countdown--${countdown.status}`}>
+          <span className="countdown-number">{countdown.days}</span>
+          <span className="countdown-label">
+            {countdown.status === "upcoming" && countdown.label}
+            {countdown.status === "active" && countdown.label}
+            {countdown.status === "past" && (
+              <>Trip ended · {countdown.days} {countdown.label}</>
+            )}
+          </span>
+        </div>
+
         <div className="meta-grid">
           <div className="meta-card">
             <span>Hotel</span>
@@ -41,6 +86,36 @@ export default function TripPlanner() {
           </div>
         </div>
       </header>
+
+      <section className="panel bookings-panel">
+        <h2 className="section-title">Booking references</h2>
+        <p className="bookings-hint">Edit values in <code>tripData.js</code> → <code>BOOKINGS</code></p>
+        <div className="bookings-grid">
+          {BOOKINGS.flights.map((flight) => (
+            <div key={flight.route} className="booking-card">
+              <span className="booking-label">✈️ Flight PNR</span>
+              <span className="booking-sub">{flight.route}</span>
+              <span className={`booking-value${flight.pnr ? "" : " booking-value--empty"}`}>
+                {flight.pnr || "—"}
+              </span>
+            </div>
+          ))}
+          <div className="booking-card">
+            <span className="booking-label">🏨 Hotel booking ID</span>
+            <span className="booking-sub">{TRIP_INFO.hotel}</span>
+            <span className={`booking-value${BOOKINGS.hotelBookingId ? "" : " booking-value--empty"}`}>
+              {BOOKINGS.hotelBookingId || "—"}
+            </span>
+          </div>
+          <div className="booking-card">
+            <span className="booking-label">🚗 Car booking ID</span>
+            <span className="booking-sub">{TRIP_INFO.car}</span>
+            <span className={`booking-value${BOOKINGS.carBookingId ? "" : " booking-value--empty"}`}>
+              {BOOKINGS.carBookingId || "—"}
+            </span>
+          </div>
+        </div>
+      </section>
 
       <nav className="day-tabs" aria-label="Trip days">
         {DAYS.map((d) => (
