@@ -38,7 +38,7 @@ function Countdown() {
   useEffect(() => {
     const calc = () => {
       const now = new Date();
-      const trip = new Date("2025-12-09T00:00:00");
+      const trip = new Date("2026-12-09T00:00:00");
       const ms = trip - now;
       if (ms <= 0) { setDiff({ days: 0, hrs: 0, mins: 0, gone: true }); return; }
       const days = Math.floor(ms / 86400000);
@@ -65,7 +65,7 @@ function Countdown() {
           </div>
         ))}
       </div>
-      <p style={{ color: "#6b5f9e", fontSize: 11, margin: "10px 0 0", textAlign: "center" }}>Dec 9–13 · Hotel 201 · Kia Sportage · 2 travellers</p>
+      <p style={{ color: "#6b5f9e", fontSize: 11, margin: "10px 0 0", textAlign: "center" }}>Dec 9–13, 2026 · Hotel 201 · Toyota Yaris Cross · 2 travellers</p>
     </div>
   );
 }
@@ -113,6 +113,12 @@ function Stop({ stop, checked, onToggle }) {
       {open && (
         <div style={{ padding: "0 12px 12px", borderTop: `1px solid ${c.border}` }}>
           {stop.note && <p style={{ fontSize: 13, color: "#ccc", margin: "10px 0 8px", lineHeight: 1.65 }}>{stop.note}</p>}
+          {stop.walking && (
+            <div style={{ background: "#0a1a20", border: `1px solid #0f4c5c`, borderRadius: 8, padding: "7px 10px", marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 14 }}>🚶</span>
+              <p style={{ fontSize: 12, color: "#67e8f9", margin: 0, fontWeight: 500 }}>{stop.walking}</p>
+            </div>
+          )}
           {stop.parking && (
             <div style={{ background: "#0d2818", border: `1px solid ${C.greenDim}`, borderRadius: 8, padding: "8px 10px", marginBottom: 8 }}>
               <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 2px" }}>🅿️ Parking</p>
@@ -190,9 +196,12 @@ function DaysTab({ state, toggle }) {
             <span style={{ background: day.badgeColor + "33", color: day.badgeText === "#3C3489" ? C.purple : day.badgeText === "#0C447C" ? C.blue : day.badgeText === "#72243E" ? C.pink : C.amber, borderRadius: 10, padding: "3px 10px", fontSize: 11, fontWeight: 700, flexShrink: 0, marginLeft: 8, marginTop: 2 }}>{day.badge}</span>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {[`🚗 ${day.kmDriving} km`, `🅿️ ~€${day.parkingEur}`, `${done}/${stops.length} done`].map(t => (
+            {[`🚗 ${day.kmDriving} km`, `🚶 ${day.walkingKm || "—"}`, `🅿️ ~€${day.parkingEur}`, `${done}/${stops.length} done`].map(t => (
               <span key={t} style={{ background: "#222", color: C.muted, borderRadius: 8, padding: "4px 10px", fontSize: 12 }}>{t}</span>
             ))}
+            {stops.some(s => s.category === "transport" && s.icon === "⛽") && (
+              <span style={{ background: "#1c1208", color: C.amber, borderRadius: 8, padding: "4px 10px", fontSize: 12, fontWeight: 700, border: `1px solid #713f12` }}>⛽ Fuel stop today</span>
+            )}
           </div>
         </div>
 
@@ -466,15 +475,20 @@ function InfoTab({ state, update }) {
 
       {/* Car details */}
       <div style={{ background: "#0d1f2d", border: `1px solid #1e3a5f`, borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
-        <p style={{ fontSize: 13, fontWeight: 700, color: C.blue, margin: "0 0 8px" }}>🚗 Car — Toyota Yaris Cross 4x4 Hybrid</p>
+        <p style={{ fontSize: 13, fontWeight: 700, color: C.blue, margin: "0 0 8px" }}>🚗 Lotus Car Rental — Toyota Yaris Cross 4x4 Hybrid</p>
         {[
+          ["Office", "Flugvellir 6, 230 Keflavík (5 min from KEF by free shuttle)"],
+          ["Pickup", "Shared shuttle every 15 min · No booking needed · Exit at stop 4"],
+          ["After 6pm", "Private shuttle — call +354 787 4444 (press 1) on arrival"],
           ["Fuel", "95 Unleaded petrol (hybrid — never plug in, charges itself)"],
           ["Economy", "~20–22 km/litre · Est. €80–90 total fuel for trip"],
+          ["N1 chip", "Ask for N1 fuel discount chip at pickup — free, saves ISK per litre"],
+          ["Fuel stops", "N1 KEF on arrival · N1 Vík on Day 2 · N1/Olis Keflavík on Day 5"],
           ["WiFi", "Free 4G WiFi included — keep device charged via car USB"],
-          ["Fill up", "Near KEF on arrival · Vík on Day 2 · Olis Keflavík on Day 5"],
           ["Insurance", "Zero excess · SCDW · Gravel · Sand & Ash · Tire · Animal"],
-          ["Roadside", "24/7 assistance · Lost keys · Towing · Flat battery · Fuel delivery"],
-          ["On pickup", "Confirm winter tyres ✓ · Save emergency number in phone ✓"],
+          ["Roadside", "24/7 assistance — call +354 787 4444"],
+          ["Drop-off", "Return to Flugvellir 6 · Dec season open 5am–1am · Free airport shuttle"],
+          ["On pickup", "Ask for N1 chip ✓ · Confirm winter tyres ✓ · Save +354 787 4444 now ✓"],
         ].map(([l, v]) => (
           <div key={l} style={{ display: "flex", gap: 10, padding: "6px 0", borderTop: `1px solid #1e3a5f` }}>
             <span style={{ fontSize: 12, color: C.blue, minWidth: 72, flexShrink: 0 }}>{l}</span>
@@ -529,7 +543,52 @@ function InfoTab({ state, update }) {
         />
       </div>
 
-      {/* Emergency */}
+      {/* Export / Import data */}
+      <div style={{ background: C.purpleBg, border: `1px solid ${C.purpleDim}`, borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: C.purple, margin: "0 0 6px" }}>💾 Backup your data</p>
+        <p style={{ fontSize: 12, color: "#9b8fd4", margin: "0 0 10px", lineHeight: 1.5 }}>
+          Your packing ticks, booking confirmations and notes are saved in this browser. Export before redeploying so you don't lose anything.
+        </p>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button onClick={() => {
+            const data = localStorage.getItem(SK) || "{}";
+            navigator.clipboard.writeText(data).then(() => alert("✅ Data copied to clipboard! Paste it somewhere safe (Notes, email).")).catch(() => {
+              const el = document.createElement("textarea");
+              el.value = data;
+              document.body.appendChild(el);
+              el.select();
+              document.execCommand("copy");
+              document.body.removeChild(el);
+              alert("✅ Data copied! Paste it somewhere safe.");
+            });
+          }} style={btn(C.purpleBg, C.purple, { border: `1px solid ${C.purpleDim}`, fontSize: 12 })}>
+            📋 Export data (copy)
+          </button>
+          <button onClick={() => {
+            const input = prompt("Paste your exported data here:");
+            if (!input) return;
+            try {
+              JSON.parse(input);
+              localStorage.setItem(SK, input);
+              alert("✅ Data imported! Reload the app to see your restored data.");
+              window.location.reload();
+            } catch {
+              alert("❌ Invalid data. Make sure you paste the full exported text.");
+            }
+          }} style={btn("#1a1a1a", C.muted, { border: `1px solid ${C.border2}`, fontSize: 12 })}>
+            📥 Import data (paste)
+          </button>
+          <button onClick={() => {
+            if (confirm("⚠️ This will clear ALL your data (ticks, notes, confirmations). Are you sure?")) {
+              localStorage.removeItem(SK);
+              alert("Data cleared.");
+              window.location.reload();
+            }
+          }} style={btn(C.redBg, C.red, { border: `1px solid ${C.redBg}`, fontSize: 12 })}>
+            🗑️ Clear all
+          </button>
+        </div>
+      </div>
       <div style={{ background: C.redBg, border: `1px solid #7f1d1d`, borderRadius: 12, padding: "12px 14px" }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: C.red, margin: "0 0 8px" }}>🆘 Emergency contacts</p>
         {[
@@ -548,7 +607,136 @@ function InfoTab({ state, update }) {
   );
 }
 
-// ─── Main app ─────────────────────────────────────────────────────────────────
+// ─── SOS Tab ─────────────────────────────────────────────────────────────────
+function SosTab() {
+  const sosColor = "#ff4444";
+  const sosBorder = "#7f1d1d";
+  const sosBg = "#1a0505";
+
+  const sections = [
+    {
+      title: "🚨 Life-threatening emergency",
+      color: sosColor, border: sosBorder, bg: sosBg,
+      contacts: [
+        { label: "Emergency (112)", number: "112", desc: "Police · Fire · Ambulance · Mountain rescue — FREE, 24/7", primary: true },
+      ],
+      note: "Call 112 first for any life-threatening situation. Operators speak English.",
+    },
+    {
+      title: "🚗 Lotus Car Rental — 24/7",
+      color: C.blue, border: "#1e3a5f", bg: "#0d1f2d",
+      contacts: [
+        { label: "Lotus 24/7 Roadside", number: "+354 787 4444", desc: "Breakdown · Lost keys · Flat tyre · Stuck vehicle · Fuel delivery", primary: true },
+        { label: "Airport shuttle", number: "+354 787 4444", desc: "Press 1 after clearing customs for private shuttle after 6pm" },
+        { label: "Email", number: "info@lotuscarrental.is", desc: "Non-urgent queries", noCall: true },
+      ],
+      note: "Lotus has service affiliates all around Iceland. Help is always close.",
+    },
+    {
+      title: "🏨 Hotel 201",
+      color: C.purple, border: "#4c1d95", bg: "#1e1040",
+      contacts: [
+        { label: "Hotel 201 reception", number: "+354 556 1100", desc: "24/7 front desk · Hliðasmári 5, Kópavogur", primary: true },
+      ],
+      note: "Your home base. Call if you need directions, have an issue, or need help.",
+    },
+    {
+      title: "🛣️ Road & weather emergencies",
+      color: C.amber, border: "#713f12", bg: "#1c1208",
+      contacts: [
+        { label: "Road emergency / rescue", number: "1777", desc: "Icelandic emergency road line — breakdown, stuck on road", primary: true },
+        { label: "Vegagerðin (roads)", number: "1777", desc: "Road conditions · Closures · Weather hazards" },
+      ],
+      note: "Check road.is every morning. If a road is marked closed — do not drive it.",
+    },
+    {
+      title: "🌌 Aurora & Tour",
+      color: "#a78bfa", border: "#4c1d95", bg: "#1e1040",
+      contacts: [
+        { label: "Adventures.is (tour op)", number: "+354 562 7000", desc: "Your lava tunnel + northern lights tour operator", primary: false },
+        { label: "Email adventures.is", number: "info@adventures.is", desc: "For tour queries / rescheduling", noCall: true },
+      ],
+      note: "Tour pickup is 19:30 Dec 9 from central Reykjavík. Free re-try if no aurora.",
+    },
+    {
+      title: "🏥 Medical & safety",
+      color: C.green, border: "#14532d", bg: "#0d2818",
+      contacts: [
+        { label: "Emergency", number: "112", desc: "Medical emergency — ambulance", primary: true },
+        { label: "NHS Direct equivalent", number: "1770", desc: "Non-emergency medical advice in Iceland" },
+        { label: "Safe Travel Iceland", number: "safetravel.is", desc: "Register your trip — family can track you", noCall: true },
+        { label: "Landspítali Hospital", number: "+354 543 1000", desc: "Reykjavík main hospital — Hringbraut, 101 Reykjavík" },
+      ],
+      note: "EHIC card covers emergency treatment in Iceland. Carry it at all times.",
+    },
+    {
+      title: "🅿️ Parking & payment issues",
+      color: C.teal, border: "#0f766e", bg: "#0d3330",
+      contacts: [
+        { label: "Parka support", number: "parka.is", desc: "Parking app issues — use in-app chat", noCall: true },
+        { label: "EasyPark support", number: "easypark.net", desc: "Backup parking app", noCall: true },
+        { label: "Wise card support", number: "wise.com/help", desc: "Card blocked / payment issues", noCall: true },
+      ],
+      note: "Always choose ISK not EUR at payment terminals. Call your bank if card declined.",
+    },
+  ];
+
+  return (
+    <div style={{ padding: "16px 16px 80px", background: C.bg }}>
+      <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: "0 0 4px" }}>🆘 Emergency & Support</h2>
+      <p style={{ fontSize: 13, color: C.muted, margin: "0 0 16px", lineHeight: 1.5 }}>All numbers saved here — save this page as a bookmark. Works offline once loaded.</p>
+
+      <div style={{ background: "#1a0505", border: "1px solid #7f1d1d", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
+        <p style={{ color: "#f87171", fontWeight: 800, fontSize: 16, margin: "0 0 2px" }}>🚨 112 — Main emergency number</p>
+        <p style={{ color: "#fca5a5", fontSize: 12, margin: 0 }}>Police · Fire · Ambulance · Mountain rescue · Always FREE · Always answered in English</p>
+        <a href="tel:112" style={{ display: "block", marginTop: 10, background: "#7f1d1d", color: "#fff", borderRadius: 10, padding: "10px", textAlign: "center", textDecoration: "none", fontWeight: 800, fontSize: 16 }}>📞 Call 112 now</a>
+      </div>
+
+      {sections.map((s, si) => (
+        <div key={si} style={{ background: s.bg, border: `1px solid ${s.border}`, borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: s.color, margin: "0 0 8px" }}>{s.title}</p>
+          {s.contacts.map((c, ci) => (
+            <div key={ci} style={{ padding: "8px 0", borderTop: `1px solid ${s.border}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: C.text }}>{c.label}</p>
+                  <p style={{ margin: "1px 0 0", fontSize: 11, color: C.muted, lineHeight: 1.5 }}>{c.desc}</p>
+                </div>
+                {!c.noCall ? (
+                  <a href={`tel:${c.number.replace(/\s/g, "")}`} style={{
+                    background: c.primary ? s.color : "transparent",
+                    border: `1px solid ${s.color}`,
+                    color: c.primary ? "#000" : s.color,
+                    borderRadius: 8, padding: "5px 12px", fontSize: 12, fontWeight: 700,
+                    textDecoration: "none", flexShrink: 0, whiteSpace: "nowrap",
+                  }}>📞 {c.number}</a>
+                ) : (
+                  <span style={{ fontSize: 11, color: s.color, fontWeight: 600, flexShrink: 0 }}>{c.number}</span>
+                )}
+              </div>
+            </div>
+          ))}
+          {s.note && <p style={{ fontSize: 11, color: C.muted, margin: "8px 0 0", lineHeight: 1.5, fontStyle: "italic" }}>{s.note}</p>}
+        </div>
+      ))}
+
+      <div style={{ ...card(), padding: "12px 14px" }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: C.text, margin: "0 0 8px" }}>📍 Key addresses</p>
+        {[
+          ["Hotel 201", "Hliðasmári 5, 200 Kópavogur"],
+          ["Lotus Car Rental", "Flugvellir 6, 230 Keflavík"],
+          ["KEF Airport", "Keflavíkurflugvöllur, 235 Reykjanesbær"],
+          ["Landspítali Hospital", "Hringbraut, 101 Reykjavík"],
+        ].map(([l, v]) => (
+          <div key={l} style={{ display: "flex", gap: 10, padding: "6px 0", borderTop: `1px solid ${C.border}` }}>
+            <span style={{ fontSize: 12, color: C.muted, minWidth: 80, flexShrink: 0 }}>{l}</span>
+            <span style={{ fontSize: 12, color: C.text, fontWeight: 500 }}>{v}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 const TABS = [
   { id: "days", icon: "📅", label: "Days" },
   { id: "bookings", icon: "📋", label: "Bookings" },
@@ -556,6 +744,7 @@ const TABS = [
   { id: "weather", icon: "🌦️", label: "Weather" },
   { id: "cost", icon: "💶", label: "Cost" },
   { id: "info", icon: "ℹ️", label: "Info" },
+  { id: "sos", icon: "🆘", label: "SOS" },
 ];
 
 export default function App() {
@@ -583,7 +772,7 @@ export default function App() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
           <div>
             <h1 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: C.text }}>🇮🇸 Iceland Trip</h1>
-            <p style={{ margin: "2px 0 0", fontSize: 11, color: C.muted }}>Dec 9–13 · Hotel 201 · 2 travellers</p>
+            <p style={{ margin: "2px 0 0", fontSize: 11, color: C.muted }}>Dec 9–13, 2026 · Hotel 201 · 2 travellers</p>
           </div>
           <div style={{ textAlign: "right" }}>
             <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: C.purple }}>{doneStops}/{allStops.length} done</p>
@@ -610,6 +799,7 @@ export default function App() {
         {tab === "weather" && <WeatherTab />}
         {tab === "cost" && <CostTab />}
         {tab === "info" && <InfoTab state={state} update={update} />}
+        {tab === "sos" && <SosTab />}
       </div>
 
       {/* Bottom nav */}
