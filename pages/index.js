@@ -121,13 +121,20 @@ function Stop({ stop, checked, onToggle }) {
           )}
           {stop.parking && (
             <div style={{ background: "#0d2818", border: `1px solid ${C.greenDim}`, borderRadius: 8, padding: "8px 10px", marginBottom: 8 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 2px" }}>🅿️ Parking</p>
-              <p style={{ fontSize: 12, color: "#86efac", margin: 0 }}>{stop.parking}</p>
+              <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 4px" }}>🅿️ Parking</p>
+              <p style={{ fontSize: 12, color: "#86efac", margin: "0 0 6px" }}>{stop.parking}</p>
+              {stop.parkingMapsUrl && (
+                <a href={stop.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 4,
+                  background: C.greenBg, color: C.green, borderRadius: 6,
+                  padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
+                }}>🗺️ Open parking in Maps ↗</a>
+              )}
             </div>
           )}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {stop.mapsUrl && (
-              <a href={stop.mapsUrl} target="_blank" rel="noreferrer" style={btn(C.blueBg, C.blue, { textDecoration: "none", fontSize: 12 })}>📍 Google Maps ↗</a>
+              <a href={stop.mapsUrl} target="_blank" rel="noreferrer" style={btn(C.blueBg, C.blue, { textDecoration: "none", fontSize: 12 })}>📍 Open stop in Maps ↗</a>
             )}
             <button onClick={e => { e.stopPropagation(); onToggle(); }} style={btn(checked ? C.greenBg : "#1a1a1a", checked ? C.green : C.muted, { fontSize: 12 })}>
               {checked ? "✓ Done — undo?" : "Mark done"}
