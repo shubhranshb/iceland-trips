@@ -7,15 +7,15 @@ function save(s) { try { localStorage.setItem(SK, JSON.stringify(s)); } catch {}
 
 // ─── Tiny UI primitives ───────────────────────────────────────────────────────
 const C = {
-  bg: "#0f0f0f", card: "#1a1a1a", border: "#2a2a2a", border2: "#333",
-  text: "#f0f0f0", muted: "#888", subtle: "#555",
-  green: "#22c55e", greenDim: "#14532d", greenBg: "#0d2818",
-  purple: "#a78bfa", purpleBg: "#1e1040", purpleDim: "#4c1d95",
-  blue: "#60a5fa", blueBg: "#1e3a5f",
-  amber: "#fbbf24", amberBg: "#451a03",
-  red: "#f87171", redBg: "#450a0a",
-  pink: "#f9a8d4", pinkBg: "#4a0e2a",
-  teal: "#2dd4bf", tealBg: "#0d3330",
+  bg: "#f5f6fa", card: "#ffffff", border: "#e2e4ea", border2: "#d0d3dc",
+  text: "#1a1d2e", muted: "#6b7080", subtle: "#9ca3af",
+  green: "#16a34a", greenDim: "#bbf7d0", greenBg: "#f0fdf4",
+  purple: "#7c3aed", purpleBg: "#f5f3ff", purpleDim: "#ddd6fe",
+  blue: "#2563eb", blueBg: "#eff6ff",
+  amber: "#d97706", amberBg: "#fffbeb",
+  red: "#dc2626", redBg: "#fef2f2",
+  pink: "#db2777", pinkBg: "#fdf2f8",
+  teal: "#0d9488", tealBg: "#f0fdfa",
 };
 
 const btn = (bg, color, extra = {}) => ({
@@ -55,88 +55,89 @@ function Countdown() {
     </div>
   );
   return (
-    <div style={{ background: "linear-gradient(135deg, #1e1040 0%, #0f0820 100%)", border: `1px solid ${C.purpleDim}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 }}>
-      <p style={{ color: C.purple, fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: ".08em", margin: "0 0 10px" }}>🇮🇸 Countdown to Iceland</p>
+    <div style={{ background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)", border: `1px solid #6d28d9`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 }}>
+      <p style={{ color: "#e9d5ff", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: ".08em", margin: "0 0 10px" }}>🇮🇸 Countdown to Iceland</p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
         {[["Days", diff.days], ["Hours", diff.hrs], ["Mins", diff.mins]].map(([l, v]) => (
-          <div key={l} style={{ flex: 1, textAlign: "center", background: "#2d1f5e", borderRadius: 10, padding: "10px 6px" }}>
+          <div key={l} style={{ flex: 1, textAlign: "center", background: "rgba(255,255,255,0.2)", borderRadius: 10, padding: "10px 6px" }}>
             <p style={{ margin: 0, fontSize: 28, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{v}</p>
-            <p style={{ margin: "3px 0 0", fontSize: 10, color: C.purple, fontWeight: 600, textTransform: "uppercase" }}>{l}</p>
+            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#e9d5ff", fontWeight: 600, textTransform: "uppercase" }}>{l}</p>
           </div>
         ))}
       </div>
-      <p style={{ color: "#6b5f9e", fontSize: 11, margin: "10px 0 0", textAlign: "center" }}>Dec 9–13, 2026 · Hotel 201 · Toyota Yaris Cross · 2 travellers</p>
+      <p style={{ color: "#e9d5ff", fontSize: 11, margin: "10px 0 0", textAlign: "center" }}>Dec 9–13, 2026 · Hotel 201 · Toyota Yaris Cross · 2 travellers</p>
     </div>
   );
 }
 
 // ─── Stop card ────────────────────────────────────────────────────────────────
 const CAT = {
-  nature: { bg: "#0d2818", border: "#14532d", accent: C.green },
-  food: { bg: "#1c1208", border: "#713f12", accent: C.amber },
-  transport: { bg: C.blueBg, border: "#1e40af", accent: C.blue },
-  sightseeing: { bg: C.purpleBg, border: "#4c1d95", accent: C.purple },
-  aurora: { bg: "#050310", border: C.purpleDim, accent: C.purple },
-  spa: { bg: C.pinkBg, border: "#831843", accent: C.pink },
-  cafe: { bg: C.tealBg, border: "#0f766e", accent: C.teal },
-  rest: { bg: "#111", border: C.border, accent: C.muted },
+  nature: { bg: "#f0fdf4", border: "#bbf7d0", accent: "#16a34a" },
+  food: { bg: "#fffbeb", border: "#fde68a", accent: "#d97706" },
+  transport: { bg: "#eff6ff", border: "#bfdbfe", accent: "#2563eb" },
+  sightseeing: { bg: "#f5f3ff", border: "#ddd6fe", accent: "#7c3aed" },
+  aurora: { bg: "#1e1b4b", border: "#4338ca", accent: "#a5b4fc" },
+  spa: { bg: "#fdf2f8", border: "#fbcfe8", accent: "#db2777" },
+  cafe: { bg: "#f0fdfa", border: "#99f6e4", accent: "#0d9488" },
+  rest: { bg: "#f9fafb", border: "#e5e7eb", accent: "#6b7280" },
 };
 
 function Stop({ stop, checked, onToggle }) {
   const [open, setOpen] = useState(false);
+  const isAurora = stop.category === "aurora";
   const c = CAT[stop.category] || CAT.rest;
   return (
-    <div style={{ border: `1px solid ${checked ? C.greenDim : c.border}`, borderRadius: 12, marginBottom: 8, overflow: "hidden", background: checked ? "#0a1a0f" : c.bg, transition: "all .2s" }}>
+    <div style={{ border: `1px solid ${checked ? "#bbf7d0" : c.border}`, borderRadius: 12, marginBottom: 8, overflow: "hidden", background: checked ? "#f0fdf4" : c.bg, transition: "all .2s" }}>
       <div style={{ display: "flex", gap: 10, padding: "10px 12px", cursor: "pointer", alignItems: "flex-start" }} onClick={() => setOpen(o => !o)}>
         <div style={{ flexShrink: 0, paddingTop: 1 }}>
           <span style={{ fontSize: 20 }}>{stop.icon}</span>
           <p style={{ margin: "2px 0 0", fontSize: 10, color: C.muted, textAlign: "center" }}>{stop.time}</p>
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ margin: "0 0 2px", fontSize: 14, fontWeight: 700, color: checked ? C.muted : C.text, textDecoration: checked ? "line-through" : "none" }}>{stop.name}</p>
+          <p style={{ margin: "0 0 2px", fontSize: 14, fontWeight: 700, color: checked ? C.muted : isAurora ? "#e0e7ff" : C.text, textDecoration: checked ? "line-through" : "none" }}>{stop.name}</p>
           {stop.warning && <p style={{ margin: "0 0 3px", fontSize: 11, color: C.red, fontWeight: 600 }}>⚠️ {stop.warning}</p>}
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {(stop.tags || []).map(t => <span key={t} style={tag("#1f1f1f", C.muted)}>{t}</span>)}
+            {(stop.tags || []).map(t => <span key={t} style={tag("#f3f4f6", C.muted)}>{t}</span>)}
           </div>
         </div>
         <div style={{ flexShrink: 0, display: "flex", gap: 8, alignItems: "center" }}>
           {stop.cost != null && <span style={{ fontSize: 13, fontWeight: 700, color: C.green }}>€{stop.cost}</span>}
           <div onClick={e => { e.stopPropagation(); onToggle(); }} style={{
-            width: 26, height: 26, borderRadius: "50%", border: `2px solid ${checked ? C.green : C.subtle}`,
+            width: 26, height: 26, borderRadius: "50%", border: `2px solid ${checked ? C.green : "#d1d5db"}`,
             background: checked ? C.green : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
           }}>
-            {checked && <span style={{ color: "#000", fontSize: 14, fontWeight: 900 }}>✓</span>}
+            {checked && <span style={{ color: "#fff", fontSize: 14, fontWeight: 900 }}>✓</span>}
           </div>
           <span style={{ color: C.muted, fontSize: 12 }}>{open ? "▲" : "▼"}</span>
         </div>
       </div>
       {open && (
         <div style={{ padding: "0 12px 12px", borderTop: `1px solid ${c.border}` }}>
-          {stop.note && <p style={{ fontSize: 13, color: "#ccc", margin: "10px 0 8px", lineHeight: 1.65 }}>{stop.note}</p>}
+          {stop.note && <p style={{ fontSize: 13, color: isAurora ? "#c7d2fe" : C.muted, margin: "10px 0 8px", lineHeight: 1.65 }}>{stop.note}</p>}
           {stop.walking && (
-            <div style={{ background: "#0a1a20", border: `1px solid #0f4c5c`, borderRadius: 8, padding: "7px 10px", marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ background: "#ecfeff", border: `1px solid #a5f3fc`, borderRadius: 8, padding: "7px 10px", marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 14 }}>🚶</span>
-              <p style={{ fontSize: 12, color: "#67e8f9", margin: 0, fontWeight: 500 }}>{stop.walking}</p>
+              <p style={{ fontSize: 12, color: "#0e7490", margin: 0, fontWeight: 600 }}>{stop.walking}</p>
             </div>
           )}
           {stop.parking && (
-            <div style={{ background: "#0d2818", border: `1px solid ${C.greenDim}`, borderRadius: 8, padding: "8px 10px", marginBottom: 8 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 4px" }}>🅿️ Parking</p>
-              <p style={{ fontSize: 12, color: "#86efac", margin: "0 0 6px" }}>{stop.parking}</p>
+            <div style={{ background: "#f0fdf4", border: `1px solid #bbf7d0`, borderRadius: 8, padding: "8px 10px", marginBottom: 8 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "#15803d", margin: "0 0 4px" }}>🅿️ Parking</p>
+              <p style={{ fontSize: 12, color: "#166534", margin: "0 0 6px", lineHeight: 1.5 }}>{stop.parking}</p>
               {stop.parkingMapsUrl && (
                 <a href={stop.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
                   display: "inline-flex", alignItems: "center", gap: 4,
-                  background: C.greenBg, color: C.green, borderRadius: 6,
-                  padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
+                  background: "#dcfce7", color: "#15803d", borderRadius: 6, border: "1px solid #bbf7d0",
+                  padding: "5px 12px", fontSize: 12, fontWeight: 700, textDecoration: "none",
                 }}>🗺️ Open parking in Maps ↗</a>
               )}
             </div>
           )}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {stop.mapsUrl && (
-              <a href={stop.mapsUrl} target="_blank" rel="noreferrer" style={btn(C.blueBg, C.blue, { textDecoration: "none", fontSize: 12 })}>📍 Open stop in Maps ↗</a>
+              <a href={stop.mapsUrl} target="_blank" rel="noreferrer" style={{ ...btn("#eff6ff", "#2563eb", { textDecoration: "none", fontSize: 12, border: "1px solid #bfdbfe" }) }}>📍 Open stop in Maps ↗</a>
             )}
-            <button onClick={e => { e.stopPropagation(); onToggle(); }} style={btn(checked ? C.greenBg : "#1a1a1a", checked ? C.green : C.muted, { fontSize: 12 })}>
+            <button onClick={e => { e.stopPropagation(); onToggle(); }} style={btn(checked ? "#f0fdf4" : "#f9fafb", checked ? C.green : C.muted, { fontSize: 12, border: `1px solid ${checked ? "#bbf7d0" : "#e5e7eb"}` })}>
               {checked ? "✓ Done — undo?" : "Mark done"}
             </button>
           </div>
@@ -149,13 +150,26 @@ function Stop({ stop, checked, onToggle }) {
 // ─── Aurora box ───────────────────────────────────────────────────────────────
 function AuroraBox({ spot }) {
   return (
-    <div style={{ background: "linear-gradient(135deg, #050310 0%, #1e1040 100%)", border: `1px solid ${C.purpleDim}`, borderRadius: 12, padding: "12px 14px", marginTop: 8 }}>
-      <p style={{ color: C.purple, fontWeight: 700, fontSize: 13, margin: "0 0 4px" }}>🌌 Tonight's aurora spot</p>
-      <p style={{ color: "#e0d4ff", fontWeight: 600, fontSize: 14, margin: "0 0 6px" }}>{spot.name}</p>
-      <p style={{ color: "#9b8fd4", fontSize: 12, margin: "0 0 10px", lineHeight: 1.6 }}>{spot.note}</p>
+    <div style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)", border: `1px solid #4338ca`, borderRadius: 12, padding: "12px 14px", marginTop: 8 }}>
+      <p style={{ color: "#c7d2fe", fontWeight: 700, fontSize: 13, margin: "0 0 4px" }}>🌌 Tonight's aurora spot</p>
+      <p style={{ color: "#e0e7ff", fontWeight: 600, fontSize: 14, margin: "0 0 6px" }}>{spot.name}</p>
+      <p style={{ color: "#a5b4fc", fontSize: 12, margin: "0 0 8px", lineHeight: 1.6 }}>{spot.note}</p>
+      {spot.parking && (
+        <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 10px", marginBottom: 10 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, color: "#86efac", margin: "0 0 3px" }}>🅿️ Parking</p>
+          <p style={{ fontSize: 12, color: "#d1fae5", margin: "0 0 6px", lineHeight: 1.5 }}>{spot.parking}</p>
+          {spot.parkingMapsUrl && (
+            <a href={spot.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
+              display: "inline-flex", alignItems: "center", gap: 4,
+              background: "#065f46", color: "#86efac", borderRadius: 6,
+              padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
+            }}>🗺️ Open parking in Maps ↗</a>
+          )}
+        </div>
+      )}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {AURORA_LINKS.map(l => (
-          <a key={l.url} href={l.url} target="_blank" rel="noreferrer" style={{ background: "#2d1f5e", color: C.purple, borderRadius: 8, padding: "5px 10px", fontSize: 11, fontWeight: 600, textDecoration: "none" }}>
+          <a key={l.url} href={l.url} target="_blank" rel="noreferrer" style={{ background: "rgba(255,255,255,0.15)", color: "#e0e7ff", borderRadius: 8, padding: "5px 10px", fontSize: 11, fontWeight: 600, textDecoration: "none" }}>
             {l.label} ↗
           </a>
         ))}
@@ -204,10 +218,10 @@ function DaysTab({ state, toggle }) {
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {[`🚗 ${day.kmDriving} km`, `🚶 ${day.walkingKm || "—"}`, `🅿️ ~€${day.parkingEur}`, `${done}/${stops.length} done`].map(t => (
-              <span key={t} style={{ background: "#222", color: C.muted, borderRadius: 8, padding: "4px 10px", fontSize: 12 }}>{t}</span>
+              <span key={t} style={{ background: "#f3f4f6", color: C.muted, borderRadius: 8, padding: "4px 10px", fontSize: 12, border: "1px solid #e5e7eb" }}>{t}</span>
             ))}
             {stops.some(s => s.category === "transport" && s.icon === "⛽") && (
-              <span style={{ background: "#1c1208", color: C.amber, borderRadius: 8, padding: "4px 10px", fontSize: 12, fontWeight: 700, border: `1px solid #713f12` }}>⛽ Fuel stop today</span>
+              <span style={{ background: "#fffbeb", color: C.amber, borderRadius: 8, padding: "4px 10px", fontSize: 12, fontWeight: 700, border: `1px solid #fde68a` }}>⛽ Fuel stop today</span>
             )}
           </div>
         </div>
@@ -775,7 +789,7 @@ export default function App() {
   return (
     <div style={{ maxWidth: 480, margin: "0 auto", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", background: C.bg, minHeight: "100vh", position: "relative" }}>
       {/* Header */}
-      <div style={{ background: "#080808", borderBottom: `1px solid ${C.border}`, padding: "14px 16px 10px", position: "sticky", top: 0, zIndex: 50 }}>
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 16px 10px", position: "sticky", top: 0, zIndex: 50, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
           <div>
             <h1 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: C.text }}>🇮🇸 Iceland Trip</h1>
@@ -786,7 +800,7 @@ export default function App() {
             <p style={{ margin: "2px 0 0", fontSize: 10, color: C.subtle }}>{pct}% complete</p>
           </div>
         </div>
-        <div style={{ height: 3, background: "#222", borderRadius: 2, overflow: "hidden" }}>
+        <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, overflow: "hidden" }}>
           <div style={{ height: "100%", background: `linear-gradient(90deg, ${C.purple}, ${C.green})`, width: `${pct}%`, transition: "width .4s" }} />
         </div>
       </div>
@@ -810,7 +824,7 @@ export default function App() {
       </div>
 
       {/* Bottom nav */}
-      <div style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 480, background: "#080808", borderTop: `1px solid ${C.border}`, display: "flex", zIndex: 100 }}>
+      <div style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 480, background: "#fff", borderTop: `1px solid ${C.border}`, display: "flex", zIndex: 100, boxShadow: "0 -1px 6px rgba(0,0,0,0.06)" }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
             flex: 1, padding: "10px 0 12px", border: "none", background: "transparent", cursor: "pointer",
