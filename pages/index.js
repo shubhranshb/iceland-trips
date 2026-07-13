@@ -5,17 +5,25 @@ const SK = "iceland_trip_v4";
 function load() { try { return JSON.parse(localStorage.getItem(SK) || "{}"); } catch { return {}; } }
 function save(s) { try { localStorage.setItem(SK, JSON.stringify(s)); } catch {} }
 
-// ─── Tiny UI primitives ───────────────────────────────────────────────────────
+// ─── Design tokens — Iceland light theme ─────────────────────────────────────
 const C = {
-  bg: "#f5f6fa", card: "#ffffff", border: "#e2e4ea", border2: "#d0d3dc",
-  text: "#1a1d2e", muted: "#6b7080", subtle: "#9ca3af",
-  green: "#16a34a", greenDim: "#bbf7d0", greenBg: "#f0fdf4",
-  purple: "#7c3aed", purpleBg: "#f5f3ff", purpleDim: "#ddd6fe",
-  blue: "#2563eb", blueBg: "#eff6ff",
+  bg: "#eef4fb", card: "#ffffff", border: "#d8e3ef", border2: "#c5d4e4",
+  text: "#1e293b", muted: "#64748b", subtle: "#94a3b8",
+  green: "#059669", greenDim: "#a7f3d0", greenBg: "#ecfdf5",
+  purple: "#6366f1", purpleBg: "#eef2ff", purpleDim: "#c7d2fe",
+  blue: "#0284c7", blueBg: "#e0f2fe",
   amber: "#d97706", amberBg: "#fffbeb",
   red: "#dc2626", redBg: "#fef2f2",
   pink: "#db2777", pinkBg: "#fdf2f8",
   teal: "#0d9488", tealBg: "#f0fdfa",
+  glacier: "#bae6fd", moss: "#86efac", aurora: "#a78bfa",
+};
+
+const FONT = "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+
+const inputStyle = {
+  background: "#f8fafc", border: `1px solid ${C.border}`, color: C.text,
+  borderRadius: 8, padding: "8px 10px", fontSize: 13, outline: "none", width: "100%", boxSizing: "border-box",
 };
 
 const btn = (bg, color, extra = {}) => ({
@@ -24,7 +32,8 @@ const btn = (bg, color, extra = {}) => ({
 });
 
 const card = (extra = {}) => ({
-  background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, ...extra,
+  background: C.card, border: `1px solid ${C.border}`, borderRadius: 14,
+  boxShadow: "0 1px 3px rgba(15,23,42,0.04)", ...extra,
 });
 
 const tag = (bg, color) => ({
@@ -32,7 +41,26 @@ const tag = (bg, color) => ({
   fontWeight: 600, display: "inline-block", marginRight: 4, marginTop: 3,
 });
 
-// ─── Countdown ────────────────────────────────────────────────────────────────
+// ─── Fun Iceland tips (rotate daily) ─────────────────────────────────────────
+const ICELAND_TIPS = [
+  "December daylight is only ~4.5 hours — plan stops around sunrise (~11:00) and sunset (~15:30).",
+  "The Yaris Cross hybrid gets ~20 km/l — fill up in Vík on Day 2 before the glacier stretch.",
+  "Parka app + your rental plate = no parking fines. Add the plate at car pickup!",
+  "Reynisfjara beach waves are deadly — never turn your back on the ocean.",
+  "Aurora needs KP ≥ 3 + clear skies. Check vedur.is cloud cover before heading out.",
+  "Choose ISK not EUR at payment terminals — you'll save on conversion fees.",
+  "Bónus supermarket (yellow pig) is Iceland's cheapest — stock up before road days.",
+];
+
+function IcelandTip() {
+  const tip = ICELAND_TIPS[new Date().getDate() % ICELAND_TIPS.length];
+  return (
+    <div style={{ background: C.blueBg, border: `1px solid ${C.glacier}`, borderRadius: 12, padding: "10px 14px", marginBottom: 12 }}>
+      <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: ".06em" }}>💡 Iceland tip</p>
+      <p style={{ margin: "4px 0 0", fontSize: 12, color: "#0369a1", lineHeight: 1.55 }}>{tip}</p>
+    </div>
+  );
+}
 function Countdown() {
   const [diff, setDiff] = useState(null);
   useEffect(() => {
@@ -55,36 +83,35 @@ function Countdown() {
     </div>
   );
   return (
-    <div style={{ background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)", border: `1px solid #6d28d9`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 }}>
-      <p style={{ color: "#e9d5ff", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: ".08em", margin: "0 0 10px" }}>🇮🇸 Countdown to Iceland</p>
+    <div style={{ background: "linear-gradient(135deg, #6366f1 0%, #0284c7 50%, #0d9488 100%)", borderRadius: 16, padding: "16px", marginBottom: 12, boxShadow: "0 4px 14px rgba(99,102,241,0.25)" }}>
+      <p style={{ color: "#e0e7ff", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".08em", margin: "0 0 10px" }}>🇮🇸 Countdown to Iceland</p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
         {[["Days", diff.days], ["Hours", diff.hrs], ["Mins", diff.mins]].map(([l, v]) => (
-          <div key={l} style={{ flex: 1, textAlign: "center", background: "rgba(255,255,255,0.2)", borderRadius: 10, padding: "10px 6px" }}>
+          <div key={l} style={{ flex: 1, textAlign: "center", background: "rgba(255,255,255,0.25)", borderRadius: 12, padding: "12px 6px", backdropFilter: "blur(4px)" }}>
             <p style={{ margin: 0, fontSize: 28, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{v}</p>
-            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#e9d5ff", fontWeight: 600, textTransform: "uppercase" }}>{l}</p>
+            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#e0e7ff", fontWeight: 600, textTransform: "uppercase" }}>{l}</p>
           </div>
         ))}
       </div>
-      <p style={{ color: "#e9d5ff", fontSize: 11, margin: "10px 0 0", textAlign: "center" }}>Dec 9–13, 2026 · Hotel 201 · Toyota Yaris Cross · 2 travellers</p>
+      <p style={{ color: "#e0e7ff", fontSize: 11, margin: "10px 0 0", textAlign: "center" }}>Dec 9–13, 2026 · Hotel 201 · Toyota Yaris Cross · 2 travellers</p>
     </div>
   );
 }
 
 // ─── Stop card ────────────────────────────────────────────────────────────────
 const CAT = {
-  nature: { bg: "#f0fdf4", border: "#bbf7d0", accent: "#16a34a" },
+  nature: { bg: "#ecfdf5", border: "#a7f3d0", accent: "#059669" },
   food: { bg: "#fffbeb", border: "#fde68a", accent: "#d97706" },
-  transport: { bg: "#eff6ff", border: "#bfdbfe", accent: "#2563eb" },
-  sightseeing: { bg: "#f5f3ff", border: "#ddd6fe", accent: "#7c3aed" },
-  aurora: { bg: "#1e1b4b", border: "#4338ca", accent: "#a5b4fc" },
+  transport: { bg: "#e0f2fe", border: "#bae6fd", accent: "#0284c7" },
+  sightseeing: { bg: "#eef2ff", border: "#c7d2fe", accent: "#6366f1" },
+  aurora: { bg: "#ede9fe", border: "#c4b5fd", accent: "#7c3aed" },
   spa: { bg: "#fdf2f8", border: "#fbcfe8", accent: "#db2777" },
   cafe: { bg: "#f0fdfa", border: "#99f6e4", accent: "#0d9488" },
-  rest: { bg: "#f9fafb", border: "#e5e7eb", accent: "#6b7280" },
+  rest: { bg: "#f8fafc", border: "#e2e8f0", accent: "#64748b" },
 };
 
 function Stop({ stop, checked, onToggle }) {
   const [open, setOpen] = useState(false);
-  const isAurora = stop.category === "aurora";
   const c = CAT[stop.category] || CAT.rest;
   return (
     <div style={{ border: `1px solid ${checked ? "#bbf7d0" : c.border}`, borderRadius: 12, marginBottom: 8, overflow: "hidden", background: checked ? "#f0fdf4" : c.bg, transition: "all .2s" }}>
@@ -94,10 +121,13 @@ function Stop({ stop, checked, onToggle }) {
           <p style={{ margin: "2px 0 0", fontSize: 10, color: C.muted, textAlign: "center" }}>{stop.time}</p>
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ margin: "0 0 2px", fontSize: 14, fontWeight: 700, color: checked ? C.muted : isAurora ? "#e0e7ff" : C.text, textDecoration: checked ? "line-through" : "none" }}>{stop.name}</p>
+          <p style={{ margin: "0 0 2px", fontSize: 14, fontWeight: 700, color: checked ? C.muted : C.text, textDecoration: checked ? "line-through" : "none" }}>{stop.name}</p>
           {stop.warning && <p style={{ margin: "0 0 3px", fontSize: 11, color: C.red, fontWeight: 600 }}>⚠️ {stop.warning}</p>}
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {(stop.tags || []).map(t => <span key={t} style={tag("#f3f4f6", C.muted)}>{t}</span>)}
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 4 }}>
+            {(stop.tags || []).map(t => <span key={t} style={tag("#f1f5f9", C.muted)}>{t}</span>)}
+            {stop.parking && !open && (
+              <span style={tag(C.greenBg, C.green)}>🅿️ Parking info</span>
+            )}
           </div>
         </div>
         <div style={{ flexShrink: 0, display: "flex", gap: 8, alignItems: "center" }}>
@@ -113,7 +143,7 @@ function Stop({ stop, checked, onToggle }) {
       </div>
       {open && (
         <div style={{ padding: "0 12px 12px", borderTop: `1px solid ${c.border}` }}>
-          {stop.note && <p style={{ fontSize: 13, color: isAurora ? "#c7d2fe" : C.muted, margin: "10px 0 8px", lineHeight: 1.65 }}>{stop.note}</p>}
+          {stop.note && <p style={{ fontSize: 13, color: C.muted, margin: "10px 0 8px", lineHeight: 1.65 }}>{stop.note}</p>}
           {stop.walking && (
             <div style={{ background: "#ecfeff", border: `1px solid #a5f3fc`, borderRadius: 8, padding: "7px 10px", marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 14 }}>🚶</span>
@@ -121,14 +151,14 @@ function Stop({ stop, checked, onToggle }) {
             </div>
           )}
           {stop.parking && (
-            <div style={{ background: "#f0fdf4", border: `1px solid #bbf7d0`, borderRadius: 8, padding: "8px 10px", marginBottom: 8 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "#15803d", margin: "0 0 4px" }}>🅿️ Parking</p>
-              <p style={{ fontSize: 12, color: "#166534", margin: "0 0 6px", lineHeight: 1.5 }}>{stop.parking}</p>
+            <div style={{ background: C.greenBg, border: `1px solid ${C.greenDim}`, borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 4px" }}>🅿️ Parking</p>
+              <p style={{ fontSize: 12, color: "#047857", margin: "0 0 6px", lineHeight: 1.5 }}>{stop.parking}</p>
               {stop.parkingMapsUrl && (
                 <a href={stop.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
                   display: "inline-flex", alignItems: "center", gap: 4,
-                  background: "#dcfce7", color: "#15803d", borderRadius: 6, border: "1px solid #bbf7d0",
-                  padding: "5px 12px", fontSize: 12, fontWeight: 700, textDecoration: "none",
+                  background: "#fff", color: C.green, borderRadius: 8, border: `1px solid ${C.greenDim}`,
+                  padding: "6px 12px", fontSize: 12, fontWeight: 700, textDecoration: "none",
                 }}>🗺️ Open parking in Maps ↗</a>
               )}
             </div>
@@ -150,18 +180,18 @@ function Stop({ stop, checked, onToggle }) {
 // ─── Aurora box ───────────────────────────────────────────────────────────────
 function AuroraBox({ spot }) {
   return (
-    <div style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)", border: `1px solid #4338ca`, borderRadius: 12, padding: "12px 14px", marginTop: 8 }}>
-      <p style={{ color: "#c7d2fe", fontWeight: 700, fontSize: 13, margin: "0 0 4px" }}>🌌 Tonight's aurora spot</p>
-      <p style={{ color: "#e0e7ff", fontWeight: 600, fontSize: 14, margin: "0 0 6px" }}>{spot.name}</p>
-      <p style={{ color: "#a5b4fc", fontSize: 12, margin: "0 0 8px", lineHeight: 1.6 }}>{spot.note}</p>
+    <div style={{ background: "linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%)", border: `1px solid ${C.purpleDim}`, borderRadius: 14, padding: "12px 14px", marginTop: 8 }}>
+      <p style={{ color: C.purple, fontWeight: 700, fontSize: 13, margin: "0 0 4px" }}>🌌 Tonight's aurora spot</p>
+      <p style={{ color: C.text, fontWeight: 600, fontSize: 14, margin: "0 0 6px" }}>{spot.name}</p>
+      <p style={{ color: C.muted, fontSize: 12, margin: "0 0 8px", lineHeight: 1.6 }}>{spot.note}</p>
       {spot.parking && (
-        <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 10px", marginBottom: 10 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, color: "#86efac", margin: "0 0 3px" }}>🅿️ Parking</p>
-          <p style={{ fontSize: 12, color: "#d1fae5", margin: "0 0 6px", lineHeight: 1.5 }}>{spot.parking}</p>
+        <div style={{ background: "#fff", borderRadius: 10, padding: "8px 10px", marginBottom: 10, border: `1px solid ${C.border}` }}>
+          <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 3px" }}>🅿️ Parking</p>
+          <p style={{ fontSize: 12, color: "#047857", margin: "0 0 6px", lineHeight: 1.5 }}>{spot.parking}</p>
           {spot.parkingMapsUrl && (
             <a href={spot.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
               display: "inline-flex", alignItems: "center", gap: 4,
-              background: "#065f46", color: "#86efac", borderRadius: 6,
+              background: C.greenBg, color: C.green, borderRadius: 8,
               padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
             }}>🗺️ Open parking in Maps ↗</a>
           )}
@@ -169,7 +199,7 @@ function AuroraBox({ spot }) {
       )}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {AURORA_LINKS.map(l => (
-          <a key={l.url} href={l.url} target="_blank" rel="noreferrer" style={{ background: "rgba(255,255,255,0.15)", color: "#e0e7ff", borderRadius: 8, padding: "5px 10px", fontSize: 11, fontWeight: 600, textDecoration: "none" }}>
+          <a key={l.url} href={l.url} target="_blank" rel="noreferrer" style={{ background: "#fff", color: C.purple, border: `1px solid ${C.purpleDim}`, borderRadius: 8, padding: "5px 10px", fontSize: 11, fontWeight: 600, textDecoration: "none" }}>
             {l.label} ↗
           </a>
         ))}
@@ -179,52 +209,118 @@ function AuroraBox({ spot }) {
 }
 
 // ─── Days tab ─────────────────────────────────────────────────────────────────
+const DAY_THEMES = {
+  1: { emoji: "✈️", gradient: "linear-gradient(135deg, #eef2ff, #e0e7ff)" },
+  2: { emoji: "🌊", gradient: "linear-gradient(135deg, #e0f2fe, #ecfdf5)" },
+  3: { emoji: "🌋", gradient: "linear-gradient(135deg, #fffbeb, #fef3c7)" },
+  4: { emoji: "🏙️", gradient: "linear-gradient(135deg, #fdf2f8, #fce7f3)" },
+  5: { emoji: "🛫", gradient: "linear-gradient(135deg, #f0fdfa, #ccfbf1)" },
+};
+
+function ParkingSummary({ stops, aurora }) {
+  const parkingStops = stops.filter(s => s.parking);
+  const hasAuroraParking = aurora?.parking;
+  if (!parkingStops.length && !hasAuroraParking) return null;
+
+  return (
+    <div style={{ ...card(), padding: "12px 14px", marginBottom: 12, background: C.greenBg, borderColor: C.greenDim }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: C.green }}>🅿️ Parking today</p>
+        <a href="https://www.parka.is" target="_blank" rel="noreferrer" style={{ fontSize: 11, fontWeight: 700, color: C.green, textDecoration: "none" }}>Parka app ↗</a>
+      </div>
+      {parkingStops.map(s => (
+        <div key={s.id} style={{ padding: "8px 0", borderTop: `1px solid ${C.greenDim}` }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: C.text }}>{s.time} · {s.name}</p>
+              <p style={{ margin: "3px 0 0", fontSize: 11, color: "#047857", lineHeight: 1.45 }}>{s.parking}</p>
+            </div>
+            {s.cost != null && <span style={{ fontSize: 12, fontWeight: 800, color: C.green, flexShrink: 0 }}>€{s.cost}</span>}
+          </div>
+          {s.parkingMapsUrl && (
+            <a href={s.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
+              display: "inline-flex", marginTop: 6, alignItems: "center", gap: 4,
+              background: "#fff", color: C.green, borderRadius: 6, border: `1px solid ${C.greenDim}`,
+              padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
+            }}>🗺️ Maps ↗</a>
+          )}
+        </div>
+      ))}
+      {hasAuroraParking && (
+        <div style={{ padding: "8px 0", borderTop: `1px solid ${C.greenDim}` }}>
+          <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: C.text }}>🌌 {aurora.name}</p>
+          <p style={{ margin: "3px 0 0", fontSize: 11, color: "#047857", lineHeight: 1.45 }}>{aurora.parking}</p>
+          {aurora.parkingMapsUrl && (
+            <a href={aurora.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
+              display: "inline-flex", marginTop: 6, alignItems: "center", gap: 4,
+              background: "#fff", color: C.green, borderRadius: 6, border: `1px solid ${C.greenDim}`,
+              padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
+            }}>🗺️ Maps ↗</a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DaysTab({ state, toggle }) {
   const [activeDay, setActiveDay] = useState(1);
   const day = DAYS.find(d => d.id === activeDay);
   const stops = day?.stops || [];
   const done = stops.filter(s => state[s.id]).length;
   const route = DAILY_ROUTES[activeDay];
+  const theme = DAY_THEMES[activeDay] || DAY_THEMES[1];
 
   return (
     <div>
       {/* Day selector */}
-      <div style={{ display: "flex", gap: 8, padding: "12px 16px", overflowX: "auto", background: C.card, borderBottom: `1px solid ${C.border}` }}>
+      <div style={{ display: "flex", gap: 6, padding: "12px 16px", overflowX: "auto", background: C.card, borderBottom: `1px solid ${C.border}`, WebkitOverflowScrolling: "touch" }}>
         {DAYS.map(d => {
           const dd = d.stops.filter(s => state[s.id]).length;
           const pct = Math.round((dd / d.stops.length) * 100);
+          const active = activeDay === d.id;
+          const dt = DAY_THEMES[d.id];
           return (
             <button key={d.id} onClick={() => setActiveDay(d.id)} style={{
-              flexShrink: 0, padding: "8px 16px", borderRadius: 20,
-              border: `1px solid ${activeDay === d.id ? C.purple : C.border2}`,
-              background: activeDay === d.id ? C.purpleBg : "transparent",
-              color: activeDay === d.id ? C.purple : C.muted,
+              flexShrink: 0, padding: "10px 14px", borderRadius: 12,
+              border: `2px solid ${active ? C.purple : C.border}`,
+              background: active ? C.purpleBg : "#f8fafc",
+              color: active ? C.purple : C.muted,
               fontSize: 12, fontWeight: 700, cursor: "pointer",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 2, minWidth: 56,
+              boxShadow: active ? "0 2px 8px rgba(99,102,241,0.15)" : "none",
             }}>
-              Day {d.id} {pct === 100 ? "✅" : pct > 0 ? `${pct}%` : ""}
+              <span style={{ fontSize: 18 }}>{dt.emoji}</span>
+              <span>Day {d.id}</span>
+              <span style={{ fontSize: 10, fontWeight: 600, color: pct === 100 ? C.green : active ? C.purple : C.subtle }}>
+                {pct === 100 ? "✓ Done" : pct > 0 ? `${pct}%` : d.date.split(" ")[1]}
+              </span>
             </button>
           );
         })}
       </div>
       <div style={{ padding: "12px 16px" }}>
         {/* Day header */}
-        <div style={{ ...card(), padding: "12px 14px", marginBottom: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
+        <div style={{ ...card(), padding: "14px", marginBottom: 12, background: theme.gradient }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
             <div>
-              <p style={{ margin: 0, fontSize: 11, color: C.muted }}>{day.date}</p>
-              <h2 style={{ margin: "3px 0 0", fontSize: 17, fontWeight: 800, color: C.text }}>{day.title}</h2>
+              <p style={{ margin: 0, fontSize: 11, color: C.muted, fontWeight: 600 }}>{day.date}</p>
+              <h2 style={{ margin: "4px 0 0", fontSize: 18, fontWeight: 800, color: C.text }}>{theme.emoji} {day.title}</h2>
             </div>
-            <span style={{ background: day.badgeColor + "33", color: day.badgeText === "#3C3489" ? C.purple : day.badgeText === "#0C447C" ? C.blue : day.badgeText === "#72243E" ? C.pink : C.amber, borderRadius: 10, padding: "3px 10px", fontSize: 11, fontWeight: 700, flexShrink: 0, marginLeft: 8, marginTop: 2 }}>{day.badge}</span>
+            <span style={{ background: "#fff", color: C.purple, borderRadius: 10, padding: "4px 10px", fontSize: 11, fontWeight: 700, flexShrink: 0, marginLeft: 8, border: `1px solid ${C.border}` }}>{day.badge}</span>
           </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {[`🚗 ${day.kmDriving} km`, `🚶 ${day.walkingKm || "—"}`, `🅿️ ~€${day.parkingEur}`, `${done}/${stops.length} done`].map(t => (
-              <span key={t} style={{ background: "#f3f4f6", color: C.muted, borderRadius: 8, padding: "4px 10px", fontSize: 12, border: "1px solid #e5e7eb" }}>{t}</span>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {[`🚗 ${day.kmDriving} km`, `🚶 ${day.walkingKm || "—"}`, `🅿️ ~€${day.parkingEur}`, `${done}/${stops.length} stops`].map(t => (
+              <span key={t} style={{ background: "#fff", color: C.muted, borderRadius: 8, padding: "4px 10px", fontSize: 11, fontWeight: 600, border: `1px solid ${C.border}` }}>{t}</span>
             ))}
             {stops.some(s => s.category === "transport" && s.icon === "⛽") && (
-              <span style={{ background: "#fffbeb", color: C.amber, borderRadius: 8, padding: "4px 10px", fontSize: 12, fontWeight: 700, border: `1px solid #fde68a` }}>⛽ Fuel stop today</span>
+              <span style={{ background: C.amberBg, color: C.amber, borderRadius: 8, padding: "4px 10px", fontSize: 11, fontWeight: 700, border: `1px solid #fde68a` }}>⛽ Fuel stop</span>
             )}
           </div>
         </div>
+
+        {/* Parking summary */}
+        <ParkingSummary stops={stops} aurora={day.aurora} />
 
         {/* Route link */}
         {route && (
@@ -240,9 +336,9 @@ function DaysTab({ state, toggle }) {
 
         {/* Weather link for this day */}
         {activeDay <= 4 && (
-          <a href={WEATHER_LINKS[activeDay <= 1 ? 2 : activeDay === 2 ? 0 : activeDay === 3 ? 1 : 2].url} target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: 10, background: "#0a1a20", border: "1px solid #0f4c5c", borderRadius: 10, padding: "8px 12px", marginBottom: 12, textDecoration: "none" }}>
+          <a href={WEATHER_LINKS[activeDay <= 1 ? 2 : activeDay === 2 ? 0 : activeDay === 3 ? 1 : 2].url} target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: 10, background: C.blueBg, border: `1px solid ${C.glacier}`, borderRadius: 12, padding: "8px 12px", marginBottom: 12, textDecoration: "none" }}>
             <span style={{ fontSize: 18 }}>🌦️</span>
-            <p style={{ margin: 0, fontSize: 12, fontWeight: 600, color: "#67e8f9" }}>Check weather for today's route ↗</p>
+            <p style={{ margin: 0, fontSize: 12, fontWeight: 600, color: C.blue }}>Check weather for today's route ↗</p>
           </a>
         )}
 
@@ -270,21 +366,22 @@ function BookingsTab({ state, update }) {
     update("bookings", next);
   }
 
-  const booked = BOOKINGS.filter(b => b.booked || vals[b.confirmationKey]).length;
+  const booked = BOOKINGS.filter(b => (vals[b.confirmationKey] || "").trim().length > 0).length;
 
   return (
     <div style={{ padding: "16px 16px 80px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: 0 }}>📋 Bookings</h2>
-        <span style={{ background: booked === BOOKINGS.length ? C.greenBg : "#1a1a1a", color: booked === BOOKINGS.length ? C.green : C.muted, borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>{booked}/{BOOKINGS.length} confirmed</span>
+        <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: 0 }}>✅ Confirmations</h2>
+        <span style={{ background: booked === BOOKINGS.length ? C.greenBg : C.purpleBg, color: booked === BOOKINGS.length ? C.green : C.purple, borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700, border: `1px solid ${booked === BOOKINGS.length ? C.greenDim : C.purpleDim}` }}>{booked}/{BOOKINGS.length} confirmed</span>
       </div>
+      <p style={{ fontSize: 12, color: C.muted, margin: "0 0 14px", lineHeight: 1.5 }}>Add your booking reference numbers below. The green tick appears only after you save a confirmation number.</p>
       {BOOKINGS.map(b => {
         const conf = vals[b.confirmationKey] || "";
         const link = vals[b.linkKey] || "";
         const isEdit = editing === b.id;
-        const isDone = b.booked || conf.length > 0;
+        const isDone = conf.trim().length > 0;
         return (
-          <div key={b.id} style={{ ...card(), padding: "12px 14px", marginBottom: 10, borderColor: isDone ? C.greenDim : C.border }}>
+          <div key={b.id} style={{ ...card(), padding: "12px 14px", marginBottom: 10, borderColor: isDone ? C.greenDim : C.border, borderWidth: isDone ? 2 : 1 }}>
             <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
               <span style={{ fontSize: 22, flexShrink: 0 }}>{CAT_ICON[b.category]}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -293,7 +390,7 @@ function BookingsTab({ state, update }) {
                   <span style={{ fontSize: 18 }}>{isDone ? "✅" : "⬜"}</span>
                 </div>
                 <p style={{ margin: "0 0 6px", fontSize: 12, color: C.muted }}>{b.detail}</p>
-                {conf ? <p style={{ margin: "0 0 4px", fontSize: 12, color: C.green, fontWeight: 600 }}>📝 Ref: {conf}</p> : !b.booked && <p style={{ margin: "0 0 4px", fontSize: 11, color: C.subtle }}>No confirmation added yet</p>}
+                {conf ? <p style={{ margin: "0 0 4px", fontSize: 12, color: C.green, fontWeight: 600 }}>📝 Ref: {conf}</p> : <p style={{ margin: "0 0 4px", fontSize: 11, color: C.subtle }}>No confirmation added yet</p>}
                 {link && <a href={link.startsWith("http") ? link : "https://" + link} target="_blank" rel="noreferrer" style={{ fontSize: 12, color: C.blue, textDecoration: "none" }}>🔗 Open booking ↗</a>}
               </div>
             </div>
@@ -301,18 +398,18 @@ function BookingsTab({ state, update }) {
               <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
                 <input value={conf} onChange={e => saveField(b.confirmationKey, e.target.value)}
                   placeholder="Confirmation / booking reference"
-                  style={{ background: "#111", border: `1px solid ${C.border2}`, color: C.text, borderRadius: 8, padding: "8px 10px", fontSize: 13, outline: "none" }} />
+                  style={inputStyle} />
                 <input value={link} onChange={e => saveField(b.linkKey, e.target.value)}
                   placeholder="Booking URL (optional)"
-                  style={{ background: "#111", border: `1px solid ${C.border2}`, color: C.text, borderRadius: 8, padding: "8px 10px", fontSize: 13, outline: "none" }} />
+                  style={inputStyle} />
                 <div style={{ display: "flex", gap: 8 }}>
-                  <button onClick={() => setEditing(null)} style={btn(C.greenBg, C.green)}>Save</button>
-                  {b.url && <a href={b.url} target="_blank" rel="noreferrer" style={{ ...btn(C.blueBg, C.blue), textDecoration: "none" }}>Book ↗</a>}
+                  <button onClick={() => setEditing(null)} style={btn(C.greenBg, C.green, { border: `1px solid ${C.greenDim}` })}>Save</button>
+                  {b.url && <a href={b.url} target="_blank" rel="noreferrer" style={{ ...btn(C.blueBg, C.blue, { textDecoration: "none", border: `1px solid ${C.glacier}` }) }}>Book ↗</a>}
                 </div>
               </div>
             ) : (
-              <button onClick={() => setEditing(b.id)} style={{ ...btn("#222", C.muted), marginTop: 8, fontSize: 12 }}>
-                {conf ? "Edit details" : "+ Add confirmation"}
+              <button onClick={() => setEditing(b.id)} style={{ ...btn("#f8fafc", C.purple, { marginTop: 8, fontSize: 12, border: `1px solid ${C.purpleDim}` })}>
+                {conf ? "Edit details" : "+ Add confirmation number"}
               </button>
             )}
           </div>
@@ -334,7 +431,7 @@ function PackingTab({ state, update }) {
     <div style={{ padding: "16px 16px 80px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
         <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: 0 }}>🎒 Pack list</h2>
-        <span style={{ background: doneCt === PACK_LIST.length ? C.greenBg : "#1a1a1a", color: doneCt === PACK_LIST.length ? C.green : C.muted, borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>{doneCt}/{PACK_LIST.length}</span>
+        <span style={{ background: doneCt === PACK_LIST.length ? C.greenBg : C.purpleBg, color: doneCt === PACK_LIST.length ? C.green : C.purple, borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700, border: `1px solid ${doneCt === PACK_LIST.length ? C.greenDim : C.purpleDim}` }}>{doneCt}/{PACK_LIST.length}</span>
       </div>
       {Object.entries(PACK_CATS).map(([cat, label]) => {
         const items = PACK_LIST.filter(p => p.category === cat);
@@ -353,7 +450,7 @@ function PackingTab({ state, update }) {
                   width: 22, height: 22, borderRadius: 6, border: `2px solid ${packed[item.id] ? C.green : C.subtle}`,
                   background: packed[item.id] ? C.green : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 }}>
-                  {packed[item.id] && <span style={{ color: "#000", fontSize: 12, fontWeight: 900 }}>✓</span>}
+                  {packed[item.id] && <span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span>}
                 </div>
                 <span style={{ fontSize: 13, color: packed[item.id] ? C.subtle : C.text, textDecoration: packed[item.id] ? "line-through" : "none" }}>{item.label}</span>
               </div>
@@ -372,9 +469,9 @@ function WeatherTab() {
       <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: "0 0 6px" }}>🌦️ Weather & Roads</h2>
       <p style={{ fontSize: 13, color: C.muted, margin: "0 0 16px", lineHeight: 1.6 }}>Check every morning before driving. Road conditions can change fast in December Iceland.</p>
 
-      <div style={{ ...card(), padding: "10px 14px", marginBottom: 12, background: C.redBg, borderColor: "#7f1d1d" }}>
+      <div style={{ ...card(), padding: "10px 14px", marginBottom: 12, background: C.redBg, borderColor: "#fecaca" }}>
         <p style={{ color: C.red, fontWeight: 700, fontSize: 13, margin: "0 0 4px" }}>⚠️ Critical daily habit</p>
-        <p style={{ color: "#fca5a5", fontSize: 12, margin: 0, lineHeight: 1.6 }}>Check road.is for closures every morning before setting off. December storms can close roads within hours. If road is marked F-road or closed — do not drive it.</p>
+        <p style={{ color: "#b91c1c", fontSize: 12, margin: 0, lineHeight: 1.6 }}>Check road.is for closures every morning before setting off. December storms can close roads within hours. If road is marked F-road or closed — do not drive it.</p>
       </div>
 
       <p style={{ fontSize: 12, color: C.muted, margin: "0 0 8px", fontWeight: 600, textTransform: "uppercase", letterSpacing: ".07em" }}>🌤 Weather by area</p>
@@ -382,10 +479,10 @@ function WeatherTab() {
         <a key={l.url} href={l.url} target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "flex-start", gap: 10, ...card(), padding: "10px 14px", marginBottom: 8, textDecoration: "none" }}>
           <span style={{ fontSize: 20, flexShrink: 0 }}>🌦️</span>
           <div style={{ flex: 1 }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#67e8f9" }}>{l.label}</p>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: C.blue }}>{l.label}</p>
             <p style={{ margin: "2px 0 0", fontSize: 11, color: C.muted }}>{l.desc}</p>
           </div>
-          <span style={{ color: "#67e8f9", fontSize: 16, flexShrink: 0 }}>↗</span>
+          <span style={{ color: C.blue, fontSize: 16, flexShrink: 0 }}>↗</span>
         </a>
       ))}
 
@@ -407,15 +504,15 @@ function WeatherTab() {
           <span style={{ fontSize: 20, flexShrink: 0 }}>🌌</span>
           <div style={{ flex: 1 }}>
             <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: C.purple }}>{l.label}</p>
-            <p style={{ margin: "2px 0 0", fontSize: 11, color: "#9b8fd4" }}>{l.desc}</p>
+            <p style={{ margin: "2px 0 0", fontSize: 11, color: C.muted }}>{l.desc}</p>
           </div>
           <span style={{ color: C.purple, fontSize: 16, flexShrink: 0 }}>↗</span>
         </a>
       ))}
 
-      <div style={{ background: "#0d2818", border: `1px solid ${C.greenDim}`, borderRadius: 10, padding: "10px 14px", marginTop: 4 }}>
+      <div style={{ background: C.greenBg, border: `1px solid ${C.greenDim}`, borderRadius: 12, padding: "10px 14px", marginTop: 4 }}>
         <p style={{ color: C.green, fontWeight: 700, fontSize: 12, margin: "0 0 4px" }}>🌡️ What to expect in December</p>
-        <p style={{ color: "#86efac", fontSize: 12, margin: 0, lineHeight: 1.7 }}>
+        <p style={{ color: "#047857", fontSize: 12, margin: 0, lineHeight: 1.7 }}>
           Temp: −5°C to +5°C · Wind: can reach 80+ km/h · Sunset: ~15:30 · Sunrise: ~11:00 · Daylight: ~4.5h · Snow: possible but not guaranteed · Ice: very likely on paths and roads
         </p>
       </div>
@@ -423,45 +520,111 @@ function WeatherTab() {
   );
 }
 
-// ─── Cost tab ─────────────────────────────────────────────────────────────────
-function CostTab() {
-  const total = COST_BREAKDOWN.reduce((s, i) => s + i.eur, 0);
+// ─── Cost / Budget tab ────────────────────────────────────────────────────────
+function CostTab({ state, update }) {
+  const costs = state.costs || {};
+  const [editing, setEditing] = useState(null);
+  const [editVal, setEditVal] = useState("");
+
+  function getCost(item) {
+    if (costs[item.id] !== undefined && costs[item.id] !== "") return Number(costs[item.id]) || 0;
+    return item.eur;
+  }
+
+  function saveCost(id) {
+    const num = parseFloat(editVal);
+    const next = { ...costs, [id]: isNaN(num) ? 0 : Math.round(num * 100) / 100 };
+    update("costs", next);
+    setEditing(null);
+  }
+
+  function resetCost(id) {
+    const next = { ...costs };
+    delete next[id];
+    update("costs", next);
+    setEditing(null);
+  }
+
+  const total = COST_BREAKDOWN.reduce((s, i) => s + getCost(i), 0);
+  const estimateTotal = COST_BREAKDOWN.reduce((s, i) => s + i.eur, 0);
+  const diff = total - estimateTotal;
   const cats = [...new Set(COST_BREAKDOWN.map(i => i.category))];
   const catColors = { experience: C.purple, sightseeing: C.blue, transport: C.amber, food: C.teal, shopping: C.pink };
+  const editedCount = Object.keys(costs).filter(k => costs[k] !== "" && costs[k] !== undefined).length;
+
   return (
     <div style={{ padding: "16px 16px 80px" }}>
-      <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: "0 0 4px" }}>💶 Cost estimate</h2>
-      <p style={{ fontSize: 13, color: C.muted, margin: "0 0 14px" }}>On-trip costs for 2 people — excludes flights, hotel, car rental</p>
-      <div style={{ background: "linear-gradient(135deg, #0d2818 0%, #0a1f10 100%)", border: `1px solid ${C.greenDim}`, borderRadius: 14, padding: "16px", marginBottom: 14, textAlign: "center" }}>
-        <p style={{ margin: 0, fontSize: 13, color: "#86efac" }}>Total estimated on-trip spend</p>
-        <p style={{ margin: "4px 0 0", fontSize: 40, fontWeight: 900, color: C.green }}>€{total}</p>
-        <p style={{ margin: "4px 0 0", fontSize: 12, color: C.greenDim }}>for 2 people · 4 days</p>
+      <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: "0 0 4px" }}>💶 Budget tracker</h2>
+      <p style={{ fontSize: 13, color: C.muted, margin: "0 0 14px", lineHeight: 1.5 }}>Tap any amount to update with what you actually spent. Changes save automatically.</p>
+      <div style={{ background: "linear-gradient(135deg, #ecfdf5 0%, #e0f2fe 100%)", border: `1px solid ${C.greenDim}`, borderRadius: 16, padding: "16px", marginBottom: 14, textAlign: "center" }}>
+        <p style={{ margin: 0, fontSize: 13, color: C.muted, fontWeight: 600 }}>Your trip total</p>
+        <p style={{ margin: "4px 0 0", fontSize: 40, fontWeight: 900, color: C.green }}>€{total.toFixed(0)}</p>
+        <p style={{ margin: "4px 0 0", fontSize: 12, color: C.muted }}>
+          Estimate was €{estimateTotal} · {diff === 0 ? "on budget" : diff > 0 ? `€${diff.toFixed(0)} over` : `€${Math.abs(diff).toFixed(0)} under`}
+          {editedCount > 0 && ` · ${editedCount} item${editedCount > 1 ? "s" : ""} updated`}
+        </p>
       </div>
       {cats.map(cat => {
         const items = COST_BREAKDOWN.filter(i => i.category === cat);
-        const catTotal = items.reduce((s, i) => s + i.eur, 0);
+        const catTotal = items.reduce((s, i) => s + getCost(i), 0);
         const col = catColors[cat] || C.text;
         return (
           <div key={cat} style={{ ...card(), padding: "10px 14px", marginBottom: 10 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: col, textTransform: "capitalize" }}>{cat}</p>
-              <span style={{ fontSize: 14, fontWeight: 800, color: col }}>€{catTotal}</span>
+              <span style={{ fontSize: 14, fontWeight: 800, color: col }}>€{catTotal.toFixed(0)}</span>
             </div>
-            {items.map((item, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "6px 0", borderTop: `1px solid ${C.border}` }}>
-                <div style={{ flex: 1, paddingRight: 10 }}>
-                  <p style={{ margin: 0, fontSize: 13, color: C.text }}>{item.label}</p>
-                  <p style={{ margin: "1px 0 0", fontSize: 11, color: C.muted }}>{item.note}</p>
+            {items.map(item => {
+              const actual = getCost(item);
+              const isEdited = costs[item.id] !== undefined && costs[item.id] !== "";
+              const isEditing = editing === item.id;
+              return (
+                <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "8px 0", borderTop: `1px solid ${C.border}`, gap: 8 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ margin: 0, fontSize: 13, color: C.text, fontWeight: 600 }}>{item.label}</p>
+                    <p style={{ margin: "1px 0 0", fontSize: 11, color: C.muted }}>{item.note}</p>
+                    {isEdited && actual !== item.eur && (
+                      <p style={{ margin: "2px 0 0", fontSize: 10, color: C.subtle }}>Was €{item.eur}</p>
+                    )}
+                  </div>
+                  {isEditing ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end", flexShrink: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>€</span>
+                        <input
+                          type="number"
+                          value={editVal}
+                          onChange={e => setEditVal(e.target.value)}
+                          autoFocus
+                          style={{ ...inputStyle, width: 72, textAlign: "right", padding: "6px 8px" }}
+                        />
+                      </div>
+                      <div style={{ display: "flex", gap: 4 }}>
+                        <button onClick={() => saveCost(item.id)} style={btn(C.greenBg, C.green, { fontSize: 11, padding: "4px 8px" })}>Save</button>
+                        {isEdited && <button onClick={() => resetCost(item.id)} style={btn("#f8fafc", C.muted, { fontSize: 11, padding: "4px 8px", border: `1px solid ${C.border}` })}>Reset</button>}
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => { setEditing(item.id); setEditVal(String(actual)); }}
+                      style={{
+                        background: isEdited ? C.greenBg : "#f8fafc", border: `1px solid ${isEdited ? C.greenDim : C.border}`,
+                        borderRadius: 8, padding: "6px 10px", cursor: "pointer", flexShrink: 0,
+                      }}
+                    >
+                      <span style={{ fontSize: 14, fontWeight: 800, color: C.green }}>€{actual}</span>
+                      <p style={{ margin: "1px 0 0", fontSize: 9, color: C.subtle, fontWeight: 600 }}>tap to edit</p>
+                    </button>
+                  )}
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: C.green, flexShrink: 0 }}>€{item.eur}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         );
       })}
-      <div style={{ ...card(), padding: "10px 14px", background: "#111" }}>
-        <p style={{ fontSize: 12, color: C.muted, margin: 0, lineHeight: 1.7 }}>
-          Excludes: flights (booked), hotel 4 nights (booked), car rental (to book), Sky Lagoon (to book), personal shopping. ISK: 1,000 ISK ≈ €7. Prices approximate for Dec 2025.
+      <div style={{ ...card(), padding: "10px 14px", background: C.blueBg, borderColor: C.glacier }}>
+        <p style={{ fontSize: 12, color: "#0369a1", margin: 0, lineHeight: 1.7 }}>
+          Excludes flights (booked separately). ISK: 1,000 ISK ≈ €7. Tap any € amount to track real spending as you go.
         </p>
       </div>
     </div>
@@ -495,7 +658,7 @@ function InfoTab({ state, update }) {
       </div>
 
       {/* Car details */}
-      <div style={{ background: "#0d1f2d", border: `1px solid #1e3a5f`, borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
+      <div style={{ background: C.blueBg, border: `1px solid ${C.glacier}`, borderRadius: 14, padding: "12px 14px", marginBottom: 12 }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: C.blue, margin: "0 0 8px" }}>🚗 Lotus Car Rental — Toyota Yaris Cross 4x4 Hybrid</p>
         {[
           ["Office", "Flugvellir 6, 230 Keflavík (5 min from KEF by free shuttle)"],
@@ -511,9 +674,9 @@ function InfoTab({ state, update }) {
           ["Drop-off", "Return to Flugvellir 6 · Dec season open 5am–1am · Free airport shuttle"],
           ["On pickup", "Ask for N1 chip ✓ · Confirm winter tyres ✓ · Save +354 787 4444 now ✓"],
         ].map(([l, v]) => (
-          <div key={l} style={{ display: "flex", gap: 10, padding: "6px 0", borderTop: `1px solid #1e3a5f` }}>
-            <span style={{ fontSize: 12, color: C.blue, minWidth: 72, flexShrink: 0 }}>{l}</span>
-            <span style={{ fontSize: 12, color: "#93c5fd", fontWeight: 500 }}>{v}</span>
+          <div key={l} style={{ display: "flex", gap: 10, padding: "6px 0", borderTop: `1px solid ${C.glacier}` }}>
+            <span style={{ fontSize: 12, color: C.blue, minWidth: 72, flexShrink: 0, fontWeight: 600 }}>{l}</span>
+            <span style={{ fontSize: 12, color: "#0369a1", fontWeight: 500 }}>{v}</span>
           </div>
         ))}
       </div>
@@ -538,7 +701,7 @@ function InfoTab({ state, update }) {
       </div>
 
       {/* Vegetarian food */}
-      <div style={{ background: "#0d2818", border: `1px solid ${C.greenDim}`, borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
+      <div style={{ background: C.greenBg, border: `1px solid ${C.greenDim}`, borderRadius: 14, padding: "12px 14px", marginBottom: 12 }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: C.green, margin: "0 0 8px" }}>🥗 Vegetarian food cheatsheet</p>
         {[
           ["Reykjavík", "Loving Hut (vegan Asian soups) · Chickpea (falafel, closed Sun) · 101 Street Food (unlimited soup)"],
@@ -547,8 +710,8 @@ function InfoTab({ state, update }) {
           ["Budget", "Bónus supermarket (yellow pig) — Iceland's cheapest. Stock up night before road days."],
         ].map(([l, v]) => (
           <div key={l} style={{ padding: "6px 0", borderTop: `1px solid ${C.greenDim}` }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#86efac" }}>{l}: </span>
-            <span style={{ fontSize: 12, color: "#4ade80" }}>{v}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#047857" }}>{l}: </span>
+            <span style={{ fontSize: 12, color: "#065f46" }}>{v}</span>
           </div>
         ))}
       </div>
@@ -560,14 +723,14 @@ function InfoTab({ state, update }) {
           value={note}
           onChange={e => saveNote(e.target.value)}
           placeholder="Add anything here — phone numbers, reminders, PIN codes…"
-          style={{ width: "100%", minHeight: 100, background: "#111", border: `1px solid ${C.border2}`, color: C.text, borderRadius: 8, padding: "8px 10px", fontSize: 13, resize: "vertical", outline: "none", boxSizing: "border-box", lineHeight: 1.6 }}
+          style={{ width: "100%", minHeight: 100, ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
         />
       </div>
 
       {/* Export / Import data */}
       <div style={{ background: C.purpleBg, border: `1px solid ${C.purpleDim}`, borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: C.purple, margin: "0 0 6px" }}>💾 Backup your data</p>
-        <p style={{ fontSize: 12, color: "#9b8fd4", margin: "0 0 10px", lineHeight: 1.5 }}>
+        <p style={{ fontSize: 12, color: C.muted, margin: "0 0 10px", lineHeight: 1.5 }}>
           Your packing ticks, booking confirmations and notes are saved in this browser. Export before redeploying so you don't lose anything.
         </p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -596,7 +759,7 @@ function InfoTab({ state, update }) {
             } catch {
               alert("❌ Invalid data. Make sure you paste the full exported text.");
             }
-          }} style={btn("#1a1a1a", C.muted, { border: `1px solid ${C.border2}`, fontSize: 12 })}>
+          }} style={btn("#f8fafc", C.muted, { border: `1px solid ${C.border}`, fontSize: 12 })}>
             📥 Import data (paste)
           </button>
           <button onClick={() => {
@@ -610,7 +773,7 @@ function InfoTab({ state, update }) {
           </button>
         </div>
       </div>
-      <div style={{ background: C.redBg, border: `1px solid #7f1d1d`, borderRadius: 12, padding: "12px 14px" }}>
+      <div style={{ ...card(), padding: "12px 14px", background: C.redBg, borderColor: "#fecaca" }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: C.red, margin: "0 0 8px" }}>🆘 Emergency contacts</p>
         {[
           ["Emergency", "112 (police, fire, ambulance)"],
@@ -618,9 +781,9 @@ function InfoTab({ state, update }) {
           ["Hotel 201", "+354 556 1100"],
           ["Safe Travel", "safetravel.is — register your trip"],
         ].map(([l, v]) => (
-          <div key={l} style={{ display: "flex", gap: 10, padding: "5px 0", borderTop: `1px solid #7f1d1d` }}>
-            <span style={{ fontSize: 12, color: "#f87171", minWidth: 80, flexShrink: 0 }}>{l}</span>
-            <span style={{ fontSize: 12, color: "#fca5a5", fontWeight: 600 }}>{v}</span>
+          <div key={l} style={{ display: "flex", gap: 10, padding: "5px 0", borderTop: `1px solid #fecaca` }}>
+            <span style={{ fontSize: 12, color: C.red, minWidth: 80, flexShrink: 0, fontWeight: 600 }}>{l}</span>
+            <span style={{ fontSize: 12, color: "#b91c1c", fontWeight: 600 }}>{v}</span>
           </div>
         ))}
       </div>
@@ -630,14 +793,10 @@ function InfoTab({ state, update }) {
 
 // ─── SOS Tab ─────────────────────────────────────────────────────────────────
 function SosTab() {
-  const sosColor = "#ff4444";
-  const sosBorder = "#7f1d1d";
-  const sosBg = "#1a0505";
-
   const sections = [
     {
       title: "🚨 Life-threatening emergency",
-      color: sosColor, border: sosBorder, bg: sosBg,
+      color: C.red, border: "#fecaca", bg: C.redBg,
       contacts: [
         { label: "Emergency (112)", number: "112", desc: "Police · Fire · Ambulance · Mountain rescue — FREE, 24/7", primary: true },
       ],
@@ -645,7 +804,7 @@ function SosTab() {
     },
     {
       title: "🚗 Lotus Car Rental — 24/7",
-      color: C.blue, border: "#1e3a5f", bg: "#0d1f2d",
+      color: C.blue, border: C.glacier, bg: C.blueBg,
       contacts: [
         { label: "Lotus 24/7 Roadside", number: "+354 787 4444", desc: "Breakdown · Lost keys · Flat tyre · Stuck vehicle · Fuel delivery", primary: true },
         { label: "Airport shuttle", number: "+354 787 4444", desc: "Press 1 after clearing customs for private shuttle after 6pm" },
@@ -655,7 +814,7 @@ function SosTab() {
     },
     {
       title: "🏨 Hotel 201",
-      color: C.purple, border: "#4c1d95", bg: "#1e1040",
+      color: C.purple, border: C.purpleDim, bg: C.purpleBg,
       contacts: [
         { label: "Hotel 201 reception", number: "+354 556 1100", desc: "24/7 front desk · Hliðasmári 5, Kópavogur", primary: true },
       ],
@@ -663,7 +822,7 @@ function SosTab() {
     },
     {
       title: "🛣️ Road & weather emergencies",
-      color: C.amber, border: "#713f12", bg: "#1c1208",
+      color: C.amber, border: "#fde68a", bg: C.amberBg,
       contacts: [
         { label: "Road emergency / rescue", number: "1777", desc: "Icelandic emergency road line — breakdown, stuck on road", primary: true },
         { label: "Vegagerðin (roads)", number: "1777", desc: "Road conditions · Closures · Weather hazards" },
@@ -672,7 +831,7 @@ function SosTab() {
     },
     {
       title: "🌌 Aurora & Tour",
-      color: "#a78bfa", border: "#4c1d95", bg: "#1e1040",
+      color: C.purple, border: C.purpleDim, bg: C.purpleBg,
       contacts: [
         { label: "Adventures.is (tour op)", number: "+354 562 7000", desc: "Your lava tunnel + northern lights tour operator", primary: false },
         { label: "Email adventures.is", number: "info@adventures.is", desc: "For tour queries / rescheduling", noCall: true },
@@ -681,7 +840,7 @@ function SosTab() {
     },
     {
       title: "🏥 Medical & safety",
-      color: C.green, border: "#14532d", bg: "#0d2818",
+      color: C.green, border: C.greenDim, bg: C.greenBg,
       contacts: [
         { label: "Emergency", number: "112", desc: "Medical emergency — ambulance", primary: true },
         { label: "NHS Direct equivalent", number: "1770", desc: "Non-emergency medical advice in Iceland" },
@@ -692,7 +851,7 @@ function SosTab() {
     },
     {
       title: "🅿️ Parking & payment issues",
-      color: C.teal, border: "#0f766e", bg: "#0d3330",
+      color: C.teal, border: "#99f6e4", bg: C.tealBg,
       contacts: [
         { label: "Parka support", number: "parka.is", desc: "Parking app issues — use in-app chat", noCall: true },
         { label: "EasyPark support", number: "easypark.net", desc: "Backup parking app", noCall: true },
@@ -707,10 +866,10 @@ function SosTab() {
       <h2 style={{ fontSize: 18, fontWeight: 800, color: C.text, margin: "0 0 4px" }}>🆘 Emergency & Support</h2>
       <p style={{ fontSize: 13, color: C.muted, margin: "0 0 16px", lineHeight: 1.5 }}>All numbers saved here — save this page as a bookmark. Works offline once loaded.</p>
 
-      <div style={{ background: "#1a0505", border: "1px solid #7f1d1d", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
-        <p style={{ color: "#f87171", fontWeight: 800, fontSize: 16, margin: "0 0 2px" }}>🚨 112 — Main emergency number</p>
-        <p style={{ color: "#fca5a5", fontSize: 12, margin: 0 }}>Police · Fire · Ambulance · Mountain rescue · Always FREE · Always answered in English</p>
-        <a href="tel:112" style={{ display: "block", marginTop: 10, background: "#7f1d1d", color: "#fff", borderRadius: 10, padding: "10px", textAlign: "center", textDecoration: "none", fontWeight: 800, fontSize: 16 }}>📞 Call 112 now</a>
+      <div style={{ ...card(), padding: "12px 14px", marginBottom: 16, background: C.redBg, borderColor: "#fecaca" }}>
+        <p style={{ color: C.red, fontWeight: 800, fontSize: 16, margin: "0 0 2px" }}>🚨 112 — Main emergency number</p>
+        <p style={{ color: "#b91c1c", fontSize: 12, margin: 0 }}>Police · Fire · Ambulance · Mountain rescue · Always FREE · Always answered in English</p>
+        <a href="tel:112" style={{ display: "block", marginTop: 10, background: C.red, color: "#fff", borderRadius: 10, padding: "10px", textAlign: "center", textDecoration: "none", fontWeight: 800, fontSize: 16 }}>📞 Call 112 now</a>
       </div>
 
       {sections.map((s, si) => (
@@ -725,9 +884,9 @@ function SosTab() {
                 </div>
                 {!c.noCall ? (
                   <a href={`tel:${c.number.replace(/\s/g, "")}`} style={{
-                    background: c.primary ? s.color : "transparent",
+                    background: c.primary ? s.color : "#fff",
                     border: `1px solid ${s.color}`,
-                    color: c.primary ? "#000" : s.color,
+                    color: c.primary ? "#fff" : s.color,
                     borderRadius: 8, padding: "5px 12px", fontSize: 12, fontWeight: 700,
                     textDecoration: "none", flexShrink: 0, whiteSpace: "nowrap",
                   }}>📞 {c.number}</a>
@@ -759,14 +918,28 @@ function SosTab() {
   );
 }
 const TABS = [
-  { id: "days", icon: "📅", label: "Days" },
-  { id: "bookings", icon: "📋", label: "Bookings" },
-  { id: "pack", icon: "🎒", label: "Pack" },
-  { id: "weather", icon: "🌦️", label: "Weather" },
-  { id: "cost", icon: "💶", label: "Cost" },
-  { id: "info", icon: "ℹ️", label: "Info" },
-  { id: "sos", icon: "🆘", label: "SOS" },
+  { id: "days", icon: "📅", label: "Itinerary", short: "Days" },
+  { id: "bookings", icon: "✅", label: "Confirm", short: "Refs" },
+  { id: "pack", icon: "🎒", label: "Pack", short: "Pack" },
+  { id: "cost", icon: "💶", label: "Budget", short: "€" },
+  { id: "weather", icon: "🌦️", label: "Weather", short: "Wx" },
+  { id: "info", icon: "ℹ️", label: "Info", short: "Info" },
+  { id: "sos", icon: "🆘", label: "SOS", short: "SOS" },
 ];
+
+function getTabBadge(tabId, state) {
+  if (tabId === "bookings") {
+    const vals = state.bookings || {};
+    const pending = BOOKINGS.filter(b => !(vals[b.confirmationKey] || "").trim()).length;
+    return pending > 0 ? pending : null;
+  }
+  if (tabId === "pack") {
+    const packed = state.packed || {};
+    const left = PACK_LIST.filter(p => !packed[p.id]).length;
+    return left > 0 && left < PACK_LIST.length ? left : null;
+  }
+  return null;
+}
 
 export default function App() {
   const [tab, setTab] = useState("days");
@@ -787,30 +960,31 @@ export default function App() {
   const pct = Math.round((doneStops / allStops.length) * 100);
 
   return (
-    <div style={{ maxWidth: 480, margin: "0 auto", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", background: C.bg, minHeight: "100vh", position: "relative" }}>
+    <div style={{ maxWidth: 480, margin: "0 auto", fontFamily: FONT, background: C.bg, minHeight: "100vh", position: "relative" }}>
       {/* Header */}
-      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 16px 10px", position: "sticky", top: 0, zIndex: 50, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
+      <div style={{ background: "linear-gradient(180deg, #fff 0%, #f8fafc 100%)", borderBottom: `1px solid ${C.border}`, padding: "14px 16px 10px", position: "sticky", top: 0, zIndex: 50, boxShadow: "0 2px 8px rgba(15,23,42,0.04)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
           <div>
-            <h1 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: C.text }}>🇮🇸 Iceland Trip</h1>
-            <p style={{ margin: "2px 0 0", fontSize: 11, color: C.muted }}>Dec 9–13, 2026 · Hotel 201 · 2 travellers</p>
+            <h1 style={{ margin: 0, fontSize: 20, fontWeight: 900, color: C.text, letterSpacing: "-0.02em" }}>🇮🇸 Iceland 2026</h1>
+            <p style={{ margin: "2px 0 0", fontSize: 11, color: C.muted }}>Dec 9–13 · Hotel 201 · Yaris Cross · 2 travellers</p>
           </div>
-          <div style={{ textAlign: "right" }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: C.purple }}>{doneStops}/{allStops.length} done</p>
-            <p style={{ margin: "2px 0 0", fontSize: 10, color: C.subtle }}>{pct}% complete</p>
+          <div style={{ textAlign: "right", background: C.purpleBg, borderRadius: 10, padding: "6px 10px", border: `1px solid ${C.purpleDim}` }}>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: C.purple }}>{doneStops}/{allStops.length}</p>
+            <p style={{ margin: "1px 0 0", fontSize: 10, color: C.muted, fontWeight: 600 }}>{pct}% explored</p>
           </div>
         </div>
-        <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, overflow: "hidden" }}>
-          <div style={{ height: "100%", background: `linear-gradient(90deg, ${C.purple}, ${C.green})`, width: `${pct}%`, transition: "width .4s" }} />
+        <div style={{ height: 4, background: "#e2e8f0", borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ height: "100%", background: `linear-gradient(90deg, ${C.purple}, ${C.teal})`, width: `${pct}%`, transition: "width .4s", borderRadius: 4 }} />
         </div>
       </div>
 
       {/* Content */}
-      <div style={{ paddingBottom: 70 }}>
+      <div style={{ paddingBottom: 76 }}>
         {tab === "days" && (
           <div>
             <div style={{ padding: "12px 16px 0" }}>
               <Countdown />
+              <IcelandTip />
             </div>
             <DaysTab state={state} toggle={toggle} />
           </div>
@@ -818,23 +992,39 @@ export default function App() {
         {tab === "bookings" && <BookingsTab state={state} update={update} />}
         {tab === "pack" && <PackingTab state={state} update={update} />}
         {tab === "weather" && <WeatherTab />}
-        {tab === "cost" && <CostTab />}
+        {tab === "cost" && <CostTab state={state} update={update} />}
         {tab === "info" && <InfoTab state={state} update={update} />}
         {tab === "sos" && <SosTab />}
       </div>
 
       {/* Bottom nav */}
-      <div style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 480, background: "#fff", borderTop: `1px solid ${C.border}`, display: "flex", zIndex: 100, boxShadow: "0 -1px 6px rgba(0,0,0,0.06)" }}>
-        {TABS.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{
-            flex: 1, padding: "10px 0 12px", border: "none", background: "transparent", cursor: "pointer",
-            display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-            borderTop: `2px solid ${tab === t.id ? C.purple : "transparent"}`,
-          }}>
-            <span style={{ fontSize: 18 }}>{t.icon}</span>
-            <span style={{ fontSize: 9, fontWeight: 700, color: tab === t.id ? C.purple : C.subtle, textTransform: "uppercase", letterSpacing: ".05em" }}>{t.label}</span>
-          </button>
-        ))}
+      <div style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 480, background: "#fff", borderTop: `1px solid ${C.border}`, display: "flex", zIndex: 100, boxShadow: "0 -2px 12px rgba(15,23,42,0.06)", paddingBottom: "env(safe-area-inset-bottom, 0)" }}>
+        {TABS.map(t => {
+          const active = tab === t.id;
+          const badge = getTabBadge(t.id, state);
+          return (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{
+              flex: 1, padding: "8px 0 10px", border: "none", background: "transparent", cursor: "pointer",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 2, position: "relative",
+            }}>
+              <div style={{
+                background: active ? C.purpleBg : "transparent",
+                borderRadius: 10, padding: "4px 10px",
+                border: active ? `1px solid ${C.purpleDim}` : "1px solid transparent",
+              }}>
+                <span style={{ fontSize: 17 }}>{t.icon}</span>
+              </div>
+              <span style={{ fontSize: 9, fontWeight: 700, color: active ? C.purple : C.subtle, letterSpacing: ".02em" }}>{t.short}</span>
+              {badge && (
+                <span style={{
+                  position: "absolute", top: 4, right: "50%", marginRight: -22,
+                  background: C.amber, color: "#fff", borderRadius: 10,
+                  fontSize: 9, fontWeight: 800, padding: "1px 5px", minWidth: 14, textAlign: "center",
+                }}>{badge}</span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
