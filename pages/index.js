@@ -110,9 +110,231 @@ const CAT = {
   rest: { bg: "#f8fafc", border: "#e2e8f0", accent: "#64748b" },
 };
 
+const PHOTO_BY_STOP = {
+  d2s2: {
+    angle: "Stand slightly right of the main path and frame the full waterfall with dark cliff edges.",
+    timing: "Late morning light keeps mist brighter and cliffs detailed.",
+    settings: "24-35mm, f/8, 1/250s handheld or 1/5s on tripod for silky water.",
+    exampleUrl: "https://unsplash.com/s/photos/seljalandsfoss",
+  },
+  d2s3: {
+    angle: "Use the black-sand foreground and center the waterfall for symmetry.",
+    timing: "Best before sunset for warm cliff tones.",
+    settings: "16-24mm wide, f/8, 1/320s or 0.5s with ND filter.",
+    exampleUrl: "https://unsplash.com/s/photos/skogafoss",
+  },
+  d2s3b: {
+    angle: "Shoot from low in the valley to include moss walls as a natural frame.",
+    timing: "Early afternoon before the valley gets too dark.",
+    settings: "20-28mm, f/7.1, tripod recommended for 1/4s water motion.",
+    exampleUrl: "https://unsplash.com/s/photos/kvernufoss",
+  },
+  d2s5: {
+    angle: "Use the glacial lagoon edge or black ash ridges as leading lines to the ice tongue.",
+    timing: "Overcast works great for ice texture detail.",
+    settings: "24-70mm, f/8, slight underexposure (-0.3 EV) to protect highlights.",
+    exampleUrl: "https://unsplash.com/s/photos/solheimajokull",
+  },
+  d2s6: {
+    angle: "From upper lighthouse area, place the arch on a rule-of-thirds point with ocean layers.",
+    timing: "Blue hour for dramatic contrast between sea and sky.",
+    settings: "16-35mm, f/8, bracket 3 exposures for high dynamic range scenes.",
+    exampleUrl: "https://unsplash.com/s/photos/dyrholaey",
+  },
+  d2s7: {
+    angle: "Use basalt columns on one side and sea stacks in distance for depth.",
+    timing: "Low light with wave texture, but keep safe distance from water.",
+    settings: "24-35mm, f/8, 1/500s for crashing waves or 1/2s tripod for motion blur.",
+    exampleUrl: "https://unsplash.com/s/photos/reynisfjara",
+  },
+  d3s2: {
+    angle: "Shoot through Almannagja rift path to emphasize the tectonic split.",
+    timing: "Midday is fine because canyon walls reduce harsh light.",
+    settings: "16-24mm, f/8, expose for sky and lift shadows later.",
+    exampleUrl: "https://unsplash.com/s/photos/thingvellir",
+  },
+  d3s3: {
+    angle: "Frame Strokkur with people at edge of frame to show eruption scale.",
+    timing: "Wait 2-3 cycles to predict burst rhythm.",
+    settings: "35-70mm, 1/1000s, burst mode on just before eruption.",
+    exampleUrl: "https://unsplash.com/s/photos/geysir-iceland",
+  },
+  d3s4: {
+    angle: "Shoot from lower viewpoint with diagonal river bend leading to falls.",
+    timing: "Cloudy conditions avoid blown highlights in white water.",
+    settings: "16-24mm, f/9, CPL filter for reducing glare.",
+    exampleUrl: "https://unsplash.com/s/photos/gullfoss",
+  },
+  d4s1: {
+    angle: "Shoot from low angle near the waterline with mountains behind the sculpture.",
+    timing: "Sunrise or sunset gives soft reflections on steel.",
+    settings: "24-35mm, f/5.6, keep horizon level.",
+    exampleUrl: "https://unsplash.com/s/photos/sun-voyager-reykjavik",
+  },
+  d4s3: {
+    angle: "Step back to include full tower and surrounding city rooftops.",
+    timing: "Blue hour for lit windows and sky color separation.",
+    settings: "16-24mm, f/8, slight vertical correction in post.",
+    exampleUrl: "https://unsplash.com/s/photos/hallgrimskirkja",
+  },
+  d4s7: {
+    angle: "Use the boardwalk line to lead toward horizon steam and water.",
+    timing: "Dusk for best glow and atmosphere.",
+    settings: "24-35mm, f/4, ISO 800 if handheld in low light.",
+    exampleUrl: "https://unsplash.com/s/photos/sky-lagoon",
+  },
+};
+
+const PHOTO_BY_CATEGORY = {
+  nature: {
+    angle: "Use foreground textures (rocks, grass, black sand) to create depth in wide shots.",
+    timing: "Golden hour or blue hour gives better contrast than flat midday light.",
+    settings: "16-35mm, f/8, shoot one wide scene and one tighter detail frame.",
+    exampleUrl: "https://unsplash.com/s/photos/iceland-landscape",
+  },
+  sightseeing: {
+    angle: "Use nearby lines (roads, fences, buildings) to guide the eye toward landmarks.",
+    timing: "Blue hour is usually best for city landmarks and cleaner skies.",
+    settings: "24-35mm, f/5.6-f/8, keep verticals straight.",
+    exampleUrl: "https://unsplash.com/s/photos/reykjavik",
+  },
+  aurora: {
+    angle: "Place horizon in lower third and include one foreground element for scale.",
+    timing: "Shoot only when cloud cover is low and KP forecast is favorable.",
+    settings: "Tripod, 14-24mm, f/2.8, ISO 1600-3200, 4-10s exposure.",
+    exampleUrl: "https://unsplash.com/s/photos/iceland-aurora",
+  },
+};
+
+const OSMO_ACTION6_PRESETS = {
+  aurora: {
+    title: "Aurora preset (tripod)",
+    mode: "Pro Photo · RAW + JPEG",
+    settings: "ISO 800-1600 (max 3200) · Shutter 4-10s · WB 3800-4300K · EV -0.3",
+    videoMode: "Pro Video · 4K 25fps · 1/25 shutter",
+    videoSettings: "ISO 800-3200 · WB 3800-4300K · EV -0.7 · D-Cinelike",
+    videoNotes: "Tripod only for aurora video. Turn EIS/RS OFF. Keep clips 10-20s per take.",
+    notes: "Turn EIS/RS stabilization OFF on tripod. Use 2s timer or remote trigger.",
+  },
+  nature: {
+    title: "Landscape preset",
+    mode: "Pro Photo · RAW + JPEG",
+    settings: "ISO 100-400 · Shutter auto or 1/200+ handheld · WB 5200K",
+    notes: "Use Ultra Wide only when edges are important; Wide gives cleaner natural lines.",
+  },
+  sightseeing: {
+    title: "City/architecture preset",
+    mode: "Pro Photo · RAW + JPEG",
+    settings: "ISO 100-400 · Shutter 1/160+ · WB 5000K",
+    notes: "Avoid ultra-wide close to buildings to reduce distortion.",
+  },
+  transport: {
+    title: "Drive stop preset",
+    mode: "Photo",
+    settings: "ISO 100-400 · Shutter auto",
+    notes: "Keep horizon level and wipe lens before every quick roadside shot.",
+  },
+  default: {
+    title: "General preset",
+    mode: "Photo",
+    settings: "ISO 100-800 · Shutter auto · WB auto or 5200K",
+    notes: "Shoot one wide and one close detail frame per location.",
+  },
+};
+
+const QUICK_COPY_PRESETS = [
+  {
+    id: "aurora",
+    label: "🌌 Aurora",
+    text: "DJI Osmo Action 6 · Aurora: Pro Photo, RAW+JPEG, ISO 800-1600 (max 3200), shutter 4-10s, WB 3800-4300K, EV -0.3, tripod + EIS/RS OFF + 2s timer.",
+  },
+  {
+    id: "aurora-video",
+    label: "🎬 Aurora Video",
+    text: "DJI Osmo Action 6 · Aurora Video: Pro Video 4K/25fps, shutter 1/25, ISO 800-3200, WB 3800-4300K, EV -0.7, D-Cinelike, tripod + EIS/RS OFF, 10-20s clips.",
+  },
+  {
+    id: "waterfall",
+    label: "💧 Waterfall",
+    text: "DJI Osmo Action 6 · Waterfall: Pro Photo, RAW+JPEG, ISO 100-200, shutter 1/4s to 1s on tripod for silky water (or 1/500s handheld to freeze spray), WB 5200K.",
+  },
+  {
+    id: "city-night",
+    label: "🏙️ City Night",
+    text: "DJI Osmo Action 6 · City Night: Pro Photo, RAW+JPEG, ISO 400-1200, shutter 1/15s to 1/60s handheld (or 1-2s tripod), WB 4200-5000K, EV -0.3.",
+  },
+];
+
+function getPhotoGuide(stop) {
+  return PHOTO_BY_STOP[stop.id] || PHOTO_BY_CATEGORY[stop.category] || null;
+}
+
+const LOCATION_ALIASES = [
+  ["thingvellir", "pingvellir", "thingvellir national park"],
+  ["reykjavik", "reykjavik city"],
+  ["vik", "vik i myrdal", "vik village"],
+  ["dyrholaey", "dyrholaey lighthouse", "dyrholaey arch"],
+  ["solheimajokull", "solheimajokull glacier"],
+  ["grotta", "grotta lighthouse"],
+  ["skogafoss", "skoga"],
+  ["seljalandsfoss", "seljalandsfoss waterfall"],
+  ["keflavik", "kef airport", "kef"],
+  ["kopavogur", "kopavogur hotel 201"],
+];
+
+function normalizeText(v) {
+  return (v || "")
+    .toLowerCase()
+    .replace(/þ/g, "th")
+    .replace(/ð/g, "d")
+    .replace(/æ/g, "ae")
+    .replace(/ø/g, "o")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function withLocationAliases(v) {
+  const normalized = normalizeText(v);
+  const extra = LOCATION_ALIASES
+    .filter(group => group.some(term => normalized.includes(term)))
+    .flat()
+    .join(" ");
+  return `${normalized} ${extra}`.trim();
+}
+
+function getActionCamPreset(stop) {
+  if (stop.category === "aurora") return OSMO_ACTION6_PRESETS.aurora;
+  return OSMO_ACTION6_PRESETS[stop.category] || OSMO_ACTION6_PRESETS.default;
+}
+
+async function copyText(text) {
+  if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  if (typeof document !== "undefined") {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "true");
+    ta.style.position = "absolute";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    return;
+  }
+  throw new Error("Clipboard unavailable");
+}
+
 function Stop({ stop, checked, onToggle }) {
   const [open, setOpen] = useState(false);
   const c = CAT[stop.category] || CAT.rest;
+  const photo = getPhotoGuide(stop);
+  const actionPreset = getActionCamPreset(stop);
   return (
     <div style={{ border: `1px solid ${checked ? "#bbf7d0" : c.border}`, borderRadius: 12, marginBottom: 8, overflow: "hidden", background: checked ? "#f0fdf4" : c.bg, transition: "all .2s" }}>
       <div style={{ display: "flex", gap: 10, padding: "10px 12px", cursor: "pointer", alignItems: "flex-start" }} onClick={() => setOpen(o => !o)}>
@@ -126,7 +348,7 @@ function Stop({ stop, checked, onToggle }) {
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 4 }}>
             {(stop.tags || []).map(t => <span key={t} style={tag("#f1f5f9", C.muted)}>{t}</span>)}
             {stop.parking && !open && (
-              <span style={tag(C.greenBg, C.green)}>🅿️ Parking info</span>
+              <span style={tag("#f1f5f9", C.muted)}>🅿️ Parking note</span>
             )}
           </div>
         </div>
@@ -151,15 +373,41 @@ function Stop({ stop, checked, onToggle }) {
             </div>
           )}
           {stop.parking && (
-            <div style={{ background: C.greenBg, border: `1px solid ${C.greenDim}`, borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 4px" }}>🅿️ Parking</p>
-              <p style={{ fontSize: 12, color: "#047857", margin: "0 0 6px", lineHeight: 1.5 }}>{stop.parking}</p>
+            <div style={{ background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: C.text, margin: "0 0 4px" }}>🅿️ Parking (for this stop)</p>
+              <p style={{ fontSize: 12, color: C.muted, margin: "0 0 6px", lineHeight: 1.5 }}>{stop.parking}</p>
               {stop.parkingMapsUrl && (
                 <a href={stop.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
                   display: "inline-flex", alignItems: "center", gap: 4,
-                  background: "#fff", color: C.green, borderRadius: 8, border: `1px solid ${C.greenDim}`,
+                  background: "#fff", color: C.blue, borderRadius: 8, border: `1px solid ${C.glacier}`,
                   padding: "6px 12px", fontSize: 12, fontWeight: 700, textDecoration: "none",
                 }}>🗺️ Open parking in Maps ↗</a>
+              )}
+            </div>
+          )}
+          {photo && (
+            <div style={{ background: "#eff6ff", border: `1px solid ${C.glacier}`, borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
+              <p style={{ fontSize: 11, fontWeight: 800, color: C.blue, margin: "0 0 6px" }}>📸 Best photo setup</p>
+              <p style={{ fontSize: 12, color: C.text, margin: "0 0 4px", lineHeight: 1.55 }}><strong>Angle:</strong> {photo.angle}</p>
+              <p style={{ fontSize: 12, color: C.text, margin: "0 0 4px", lineHeight: 1.55 }}><strong>Timing:</strong> {photo.timing}</p>
+              <p style={{ fontSize: 12, color: C.text, margin: "0 0 7px", lineHeight: 1.55 }}><strong>Settings:</strong> {photo.settings}</p>
+              {actionPreset && (
+                <div style={{ background: "#fff", border: `1px solid ${C.glacier}`, borderRadius: 8, padding: "8px 10px", marginBottom: 7 }}>
+                  <p style={{ fontSize: 11, fontWeight: 800, color: C.blue, margin: "0 0 4px" }}>🎥 DJI Osmo Action 6 · {actionPreset.title}</p>
+                  <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Mode:</strong> {actionPreset.mode}</p>
+                  <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Set:</strong> {actionPreset.settings}</p>
+                  {actionPreset.videoMode && <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Video mode:</strong> {actionPreset.videoMode}</p>}
+                  {actionPreset.videoSettings && <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Video set:</strong> {actionPreset.videoSettings}</p>}
+                  {actionPreset.videoNotes && <p style={{ fontSize: 11, color: C.muted, margin: "0 0 3px", lineHeight: 1.5 }}>{actionPreset.videoNotes}</p>}
+                  <p style={{ fontSize: 11, color: C.muted, margin: 0, lineHeight: 1.5 }}>{actionPreset.notes}</p>
+                </div>
+              )}
+              {photo.exampleUrl && (
+                <a href={photo.exampleUrl} target="_blank" rel="noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 4,
+                  background: "#fff", color: C.blue, borderRadius: 8, border: `1px solid ${C.glacier}`,
+                  padding: "6px 12px", fontSize: 12, fontWeight: 700, textDecoration: "none",
+                }}>🖼️ See example shots ↗</a>
               )}
             </div>
           )}
@@ -179,11 +427,21 @@ function Stop({ stop, checked, onToggle }) {
 
 // ─── Aurora box ───────────────────────────────────────────────────────────────
 function AuroraBox({ spot }) {
+  const auroraPreset = OSMO_ACTION6_PRESETS.aurora;
   return (
     <div style={{ background: "linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%)", border: `1px solid ${C.purpleDim}`, borderRadius: 14, padding: "12px 14px", marginTop: 8 }}>
       <p style={{ color: C.purple, fontWeight: 700, fontSize: 13, margin: "0 0 4px" }}>🌌 Tonight's aurora spot</p>
       <p style={{ color: C.text, fontWeight: 600, fontSize: 14, margin: "0 0 6px" }}>{spot.name}</p>
       <p style={{ color: C.muted, fontSize: 12, margin: "0 0 8px", lineHeight: 1.6 }}>{spot.note}</p>
+      <div style={{ background: "#fff", borderRadius: 10, padding: "8px 10px", marginBottom: 10, border: `1px solid ${C.purpleDim}` }}>
+        <p style={{ fontSize: 11, fontWeight: 800, color: C.purple, margin: "0 0 4px" }}>🎥 DJI Osmo Action 6 · {auroraPreset.title}</p>
+        <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Mode:</strong> {auroraPreset.mode}</p>
+        <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Set:</strong> {auroraPreset.settings}</p>
+        <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Video mode:</strong> {auroraPreset.videoMode}</p>
+        <p style={{ fontSize: 12, color: C.text, margin: "0 0 3px", lineHeight: 1.5 }}><strong>Video set:</strong> {auroraPreset.videoSettings}</p>
+        <p style={{ fontSize: 11, color: C.muted, margin: "0 0 3px", lineHeight: 1.5 }}>{auroraPreset.videoNotes}</p>
+        <p style={{ fontSize: 11, color: C.muted, margin: 0, lineHeight: 1.5 }}>{auroraPreset.notes}</p>
+      </div>
       {spot.parking && (
         <div style={{ background: "#fff", borderRadius: 10, padding: "8px 10px", marginBottom: 10, border: `1px solid ${C.border}` }}>
           <p style={{ fontSize: 11, fontWeight: 700, color: C.green, margin: "0 0 3px" }}>🅿️ Parking</p>
@@ -217,59 +475,68 @@ const DAY_THEMES = {
   5: { emoji: "🛫", gradient: "linear-gradient(135deg, #f0fdfa, #ccfbf1)" },
 };
 
-function ParkingSummary({ stops, aurora }) {
-  const parkingStops = stops.filter(s => s.parking);
-  const hasAuroraParking = aurora?.parking;
-  if (!parkingStops.length && !hasAuroraParking) return null;
+function ParkingHint({ stops, aurora }) {
+  const parkingStops = stops.filter(s => s.parking).length;
+  const total = parkingStops + (aurora?.parking ? 1 : 0);
+  if (!total) return null;
 
   return (
-    <div style={{ ...card(), padding: "12px 14px", marginBottom: 12, background: C.greenBg, borderColor: C.greenDim }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: C.green }}>🅿️ Parking today</p>
-        <a href="https://www.parka.is" target="_blank" rel="noreferrer" style={{ fontSize: 11, fontWeight: 700, color: C.green, textDecoration: "none" }}>Parka app ↗</a>
+    <div style={{ ...card(), padding: "10px 12px", marginBottom: 12, background: "#f8fafc" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+        <p style={{ margin: 0, fontSize: 12, color: C.muted, lineHeight: 1.5 }}>
+          🅿️ Parking details are embedded in the relevant itinerary stops below ({total} total).
+        </p>
+        <a href="https://www.parka.is" target="_blank" rel="noreferrer" style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: C.blue, textDecoration: "none" }}>
+          Parka ↗
+        </a>
       </div>
-      {parkingStops.map(s => (
-        <div key={s.id} style={{ padding: "8px 0", borderTop: `1px solid ${C.greenDim}` }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: C.text }}>{s.time} · {s.name}</p>
-              <p style={{ margin: "3px 0 0", fontSize: 11, color: "#047857", lineHeight: 1.45 }}>{s.parking}</p>
-            </div>
-            {s.cost != null && <span style={{ fontSize: 12, fontWeight: 800, color: C.green, flexShrink: 0 }}>€{s.cost}</span>}
-          </div>
-          {s.parkingMapsUrl && (
-            <a href={s.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
-              display: "inline-flex", marginTop: 6, alignItems: "center", gap: 4,
-              background: "#fff", color: C.green, borderRadius: 6, border: `1px solid ${C.greenDim}`,
-              padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
-            }}>🗺️ Maps ↗</a>
-          )}
-        </div>
-      ))}
-      {hasAuroraParking && (
-        <div style={{ padding: "8px 0", borderTop: `1px solid ${C.greenDim}` }}>
-          <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: C.text }}>🌌 {aurora.name}</p>
-          <p style={{ margin: "3px 0 0", fontSize: 11, color: "#047857", lineHeight: 1.45 }}>{aurora.parking}</p>
-          {aurora.parkingMapsUrl && (
-            <a href={aurora.parkingMapsUrl} target="_blank" rel="noreferrer" style={{
-              display: "inline-flex", marginTop: 6, alignItems: "center", gap: 4,
-              background: "#fff", color: C.green, borderRadius: 6, border: `1px solid ${C.greenDim}`,
-              padding: "4px 10px", fontSize: 11, fontWeight: 700, textDecoration: "none",
-            }}>🗺️ Maps ↗</a>
-          )}
-        </div>
-      )}
     </div>
   );
 }
 
 function DaysTab({ state, toggle }) {
   const [activeDay, setActiveDay] = useState(1);
+  const [search, setSearch] = useState("");
+  const [copiedPreset, setCopiedPreset] = useState("");
   const day = DAYS.find(d => d.id === activeDay);
   const stops = day?.stops || [];
   const done = stops.filter(s => state[s.id]).length;
   const route = DAILY_ROUTES[activeDay];
   const theme = DAY_THEMES[activeDay] || DAY_THEMES[1];
+  const q = normalizeText(search);
+
+  const locationMatches = q
+    ? DAYS.flatMap(d => d.stops
+      .filter(s => {
+        const haystack = [s.name, s.note, (s.tags || []).join(" "), s.parking]
+          .filter(Boolean)
+          .join(" ");
+        return withLocationAliases(haystack).includes(withLocationAliases(q));
+      })
+      .map(s => ({
+        dayId: d.id,
+        date: d.date,
+        dayTitle: d.title,
+        stopId: s.id,
+        stopName: s.name,
+        time: s.time,
+      })))
+    : [];
+
+  const matchDays = q
+    ? Array.from(new Map(locationMatches.map(m => [m.dayId, m])).values())
+    : [];
+
+  async function onCopyPreset(preset) {
+    try {
+      await copyText(preset.text);
+      setCopiedPreset(preset.id);
+      setTimeout(() => setCopiedPreset(""), 1500);
+    } catch {
+      setCopiedPreset("error");
+      setTimeout(() => setCopiedPreset(""), 1800);
+    }
+  }
 
   return (
     <div>
@@ -300,6 +567,94 @@ function DaysTab({ state, toggle }) {
         })}
       </div>
       <div style={{ padding: "12px 16px" }}>
+        <div style={{ ...card(), padding: "10px 12px", marginBottom: 12 }}>
+          <p style={{ margin: "0 0 6px", fontSize: 11, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
+            Find location by day
+          </p>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search location (e.g., Reynisfjara, Skogafoss, Vik)"
+              style={{ ...inputStyle, flex: 1 }}
+            />
+            {!!search.trim() && (
+              <button onClick={() => setSearch("")} style={btn("#f8fafc", C.muted, { fontSize: 12, border: `1px solid ${C.border}` })}>
+                Clear
+              </button>
+            )}
+          </div>
+
+          {!!q && (
+            <div style={{ marginTop: 8 }}>
+              {matchDays.length > 0 ? (
+                <>
+                  <p style={{ margin: "0 0 6px", fontSize: 12, color: C.text }}>
+                    Found in {matchDays.length} day{matchDays.length > 1 ? "s" : ""}:
+                  </p>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 6 }}>
+                    {matchDays.map(m => (
+                      <button
+                        key={m.dayId}
+                        onClick={() => setActiveDay(m.dayId)}
+                        style={btn("#eef2ff", C.purple, { fontSize: 11, border: `1px solid ${C.purpleDim}`, padding: "5px 10px" })}
+                      >
+                        Day {m.dayId} · {m.date}
+                      </button>
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    {locationMatches.slice(0, 6).map(m => (
+                      <button
+                        key={m.stopId}
+                        onClick={() => setActiveDay(m.dayId)}
+                        style={{
+                          textAlign: "left",
+                          background: "#f8fafc",
+                          border: `1px solid ${C.border}`,
+                          borderRadius: 8,
+                          padding: "6px 8px",
+                          color: C.text,
+                          fontSize: 11,
+                          cursor: "pointer",
+                        }}
+                      >
+                        Day {m.dayId} · {m.time} · {m.stopName}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p style={{ margin: 0, fontSize: 12, color: C.red }}>No matching location found in itinerary yet.</p>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div style={{ ...card(), padding: "10px 12px", marginBottom: 12, background: "#f8fafc" }}>
+          <p style={{ margin: "0 0 6px", fontSize: 11, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
+            DJI one-tap presets
+          </p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {QUICK_COPY_PRESETS.map(p => (
+              <button
+                key={p.id}
+                onClick={() => onCopyPreset(p)}
+                style={btn("#eef2ff", C.purple, { fontSize: 11, border: `1px solid ${C.purpleDim}`, padding: "6px 10px" })}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <p style={{ margin: "7px 0 0", fontSize: 11, color: copiedPreset === "error" ? C.red : C.muted }}>
+            {copiedPreset && copiedPreset !== "error"
+              ? "Copied preset to clipboard."
+              : copiedPreset === "error"
+                ? "Could not copy automatically on this browser."
+                : "Tap any preset to copy settings and use them on camera."}
+          </p>
+        </div>
+
         {/* Day header */}
         <div style={{ ...card(), padding: "14px", marginBottom: 12, background: theme.gradient }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
@@ -319,8 +674,8 @@ function DaysTab({ state, toggle }) {
           </div>
         </div>
 
-        {/* Parking summary */}
-        <ParkingSummary stops={stops} aurora={day.aurora} />
+        {/* Parking stays contextual to each stop */}
+        <ParkingHint stops={stops} aurora={day.aurora} />
 
         {/* Route link */}
         {route && (
@@ -408,7 +763,7 @@ function BookingsTab({ state, update }) {
                 </div>
               </div>
             ) : (
-              <button onClick={() => setEditing(b.id)} style={{ ...btn("#f8fafc", C.purple, { marginTop: 8, fontSize: 12, border: `1px solid ${C.purpleDim}` })}>
+              <button onClick={() => setEditing(b.id)} style={{ ...btn("#f8fafc", C.purple, { marginTop: 8, fontSize: 12, border: `1px solid ${C.purpleDim}` }) }}>
                 {conf ? "Edit details" : "+ Add confirmation number"}
               </button>
             )}
