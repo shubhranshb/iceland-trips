@@ -631,7 +631,7 @@ function DaysTab({ state, toggle }) {
           )}
         </div>
 
-        <div style={{ ...card(), padding: "10px 12px", marginBottom: 12, background: "#f8fafc" }}>
+        {/* <div style={{ ...card(), padding: "10px 12px", marginBottom: 12, background: "#f8fafc" }}>
           <p style={{ margin: "0 0 6px", fontSize: 11, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
             DJI one-tap presets
           </p>
@@ -653,7 +653,7 @@ function DaysTab({ state, toggle }) {
                 ? "Could not copy automatically on this browser."
                 : "Tap any preset to copy settings and use them on camera."}
           </p>
-        </div>
+        </div> */}
 
         {/* Day header */}
         <div style={{ ...card(), padding: "14px", marginBottom: 12, background: theme.gradient }}>
